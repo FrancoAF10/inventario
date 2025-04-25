@@ -26,7 +26,7 @@
         </div>
         
         <div class="d-grid gap-2">
-            <button class="btn btn-primary" id="addConfiguraciones">Agregar</button>
+            <button class="btn btn-primary" id="addConfiguraciones" type="submit">Agregar</button>
         </div>
         <hr>
     

@@ -75,12 +75,6 @@ CREATE TABLE BIENES(
     CONSTRAINT idUsuario_fk FOREIGN KEY (idUsuario) REFERENCES USUARIOS(idUsuario)
 )Engine=InnoDB;
 
-INSERT INTO BIENES (condicion, modelo, numSerie, descripcion, fotografia, idMarca, idUsuario)
-VALUES 
-('Nuevo', 'Pavilion 15', 'SN123456', 'Laptop HP con procesador i5, 8GB RAM', 'http://example.com/images/laptop1.jpg', 1, 1),
-
-('Usado', 'Inspiron 14', 'SN654321', 'Laptop Dell para oficina, disco SSD', 'http://example.com/images/laptop1.jpg', 1, 1);
-
 CREATE TABLE ASIGNACIONES(
     idAsignacion        INT AUTO_INCREMENT PRIMARY KEY,
     inicio              DATE,
@@ -209,6 +203,36 @@ CREATE VIEW vista_bienes_registrados AS
     INNER JOIN MARCAS MC ON BN.idMarca = MC.idMarca
     INNER JOIN USUARIOS US ON BN.idUsuario = US.idUsuario;
 
+--LISTADO DE BIENES HACIA ASIGNACIONES--
+CREATE VIEW vista_bienes_asignaciones AS
+SELECT 
+    BN.idBien,
+    SC.subCategoria,
+    MC.marca,
+    BN.numSerie
+FROM BIENES BN
+INNER JOIN MARCAS MC ON BN.idMarca = MC.idMarca
+INNER JOIN SUBCATEGORIAS SC ON MC.idSubCategoria = SC.idSubCategoria;
+
+--LISTADO DE ASIGNACIONES--
+CREATE VIEW vista_asignaciones AS
+SELECT 
+    AG.idAsignacion,
+    PS.nombres,
+    PS.apellidos,
+    SC.subCategoria,
+    MC.marca,
+    BN.numSerie,
+    AG.inicio,
+    AG.fin
+FROM ASIGNACIONES AG
+INNER JOIN BIENES BN ON AG.idBien = BN.idBien
+INNER JOIN MARCAS MC ON BN.idMarca = MC.idMarca
+INNER JOIN SUBCATEGORIAS SC ON MC.idSubCategoria = SC.idSubCategoria
+INNER JOIN COLABORADORES CL ON AG.idColaborador = CL.idColaborador
+INNER JOIN PERSONA PS ON CL.idPersona = PS.idPersona;
+
+
 --PROCEDIMIENTO PARA REGISTRAR NUEVA SUBCATEGORIA--
 DELIMITER //
 CREATE PROCEDURE spu_SubCategorias_registrar(
@@ -281,6 +305,20 @@ BEGIN
 	INSERT INTO BIENES (condicion, modelo,numSerie,descripcion,fotografia,idMarca,idUsuario) 
 		VALUES
         ( _condicion, _modelo,_numSerie,_descripcion,_fotografia,_idMarca,_idUsuario);
+END //
+
+--PROCEDIMIENTO PARA REGISTRAR UNA ASIGNACIÓN--
+DELIMITER //
+CREATE PROCEDURE spu_asignacion_registrar(
+    IN _idBien		            INT,
+    IN _idColaborador	        INT,
+    IN _inicio                  DATE,
+    IN _fin                     DATE
+)
+BEGIN
+	INSERT INTO ASIGNACIONES ( idBien, idColaborador,inicio, fin) 
+		VALUES
+        (  _idBien, _idColaborador,_inicio, _fin);
 END //
 
 SELECT*FROM vista_bienes_registrados;
