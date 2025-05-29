@@ -7,7 +7,6 @@ if(isset($_SERVER['REQUEST_METHOD'])){
 
   switch($_SERVER["REQUEST_METHOD"]){
     case "GET":
-      //sleep(3);
       header("Content-Type: application/json; charset=utf-8");
 
       //DEBEMOS IDENTIFICAR SI EL USUARIO REQUIERE LISTAR/BUSCAR
@@ -34,10 +33,23 @@ if(isset($_SERVER['REQUEST_METHOD'])){
         $filasAfectadas=$configuracion->add($registro);
 
         //Notificamos al usuario el número de filas en formato JSON
-        //{"filas":1}
         header("Content-Type: application/json; charset=utf-8");
         echo json_encode(["filas"=>$filasAfectadas]);
       break;
+      case "PUT":
+        $input = file_get_contents("php://input");
+        $dataJSON = json_decode($input, true);
+  
+        $registro=[
+          "configuracion"        =>$dataJSON["configuracion"],
+          "idCategoria"          =>$dataJSON["idCategoria"],
+          "idConfiguracion" => $dataJSON["idConfiguracion"],
+        ];
+        $filasAfectadas = $configuracion->update($registro);
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode(["filas" => $filasAfectadas]);
+        break;
+  
       
       case "DELETE":
           header("Content-Type: application/json; charset=utf-8");

@@ -54,7 +54,6 @@ CREATE TABLE SUBCATEGORIAS(
     idCategoria         INT,
     CONSTRAINT idcategoria_fk FOREIGN KEY (idCategoria) REFERENCES CATEGORIAS(idCategoria)
 )Engine=InnoDB;
-
 CREATE TABLE MARCAS(
     idMarca     INT AUTO_INCREMENT PRIMARY KEY,
     marca       VARCHAR(50),
@@ -146,6 +145,18 @@ AS
     JOIN 
         CATEGORIAS CT ON SC.idCategoria = CT.idCategoria;
 
+--LISTADO DE MARCAS EN BIEN--
+
+    CREATE VIEW vista_marcas_bien AS
+    SELECT 
+        MC.idMarca,
+        MC.marca,
+        MC.idSubCategoria,
+        SC.SubCategoria
+    FROM 
+        MARCAS MC
+    JOIN 
+        SUBCATEGORIAS SC ON MC.idSubCategoria = SC.idSubCategoria;
 
 --LISTADO DE COLABORADORES--
 CREATE VIEW vista_colaboradores AS
@@ -207,12 +218,14 @@ CREATE VIEW vista_bienes_registrados AS
 CREATE VIEW vista_bienes_asignaciones AS
 SELECT 
     BN.idBien,
-    SC.subCategoria,
-    MC.marca,
-    BN.numSerie
+    BN.idMarca,
+    BN.modelo,
+    BN.numSerie,
+    BN.descripcion,
+    MC.marca
 FROM BIENES BN
-INNER JOIN MARCAS MC ON BN.idMarca = MC.idMarca
-INNER JOIN SUBCATEGORIAS SC ON MC.idSubCategoria = SC.idSubCategoria;
+INNER JOIN MARCAS MC ON BN.idMarca = MC.idMarca;
+
 
 --LISTADO DE ASIGNACIONES--
 CREATE VIEW vista_asignaciones AS
@@ -220,18 +233,63 @@ SELECT
     AG.idAsignacion,
     PS.nombres,
     PS.apellidos,
+    AR.area,
+    RL.rol,
+    CT.categoria,
     SC.subCategoria,
     MC.marca,
+    BN.modelo,
     BN.numSerie,
+    BN.condicion,
+    BN.descripcion,
+    BN.fotografia,
     AG.inicio,
     AG.fin
 FROM ASIGNACIONES AG
 INNER JOIN BIENES BN ON AG.idBien = BN.idBien
 INNER JOIN MARCAS MC ON BN.idMarca = MC.idMarca
 INNER JOIN SUBCATEGORIAS SC ON MC.idSubCategoria = SC.idSubCategoria
+INNER JOIN CATEGORIAS CT ON SC.idCategoria = CT.idCategoria
 INNER JOIN COLABORADORES CL ON AG.idColaborador = CL.idColaborador
-INNER JOIN PERSONA PS ON CL.idPersona = PS.idPersona;
+INNER JOIN PERSONA PS ON CL.idPersona = PS.idPersona
+INNER JOIN AREAS AR ON CL.idArea = AR.idArea
+INNER JOIN ROLES RL ON CL.idRol = RL.idRol;
 
+CREATE VIEW vista_bienes_segmento AS
+SELECT 
+    CR.idCaracteristica,
+    CR.segmento,
+    CT.categoria,
+    SC.subCategoria,
+    MC.marca,
+    BN.modelo,
+    BN.numSerie,
+    BN.descripcion
+FROM CARACTERISTICAS CR
+INNER JOIN BIENES BN ON CR.idBien = BN.idBien
+INNER JOIN MARCAS MC ON BN.idMarca = MC.idMarca
+INNER JOIN SUBCATEGORIAS SC ON MC.idSubCategoria = SC.idSubCategoria
+INNER JOIN CATEGORIAS CT ON SC.idCategoria = CT.idCategoria;
+
+--LISTADO DE CONFIGURACIONES--
+CREATE VIEW vista_configuraciones AS
+SELECT
+        CF.idConfiguracion,
+        CF.configuracion,
+        CT.categoria
+FROM CONFIGURACIONES CF
+INNER JOIN CATEGORIAS CT ON CF.idCategoria=CT.idCategoria;
+
+--LISTADO DE DETALLES--
+CREATE VIEW vista_detalles AS
+SELECT
+        DT.idDetalle,
+        DT.caracteristica,
+        CR.segmento,
+        CF.configuracion
+FROM DETALLES DT
+INNER JOIN CONFIGURACIONES  CF ON CF.idConfiguracion=DT.idConfiguracion
+INNER JOIN CARACTERISTICAS CR ON CR.idCaracteristica=DT.idCaracteristica;
 
 --PROCEDIMIENTO PARA REGISTRAR NUEVA SUBCATEGORIA--
 DELIMITER //
@@ -294,17 +352,17 @@ END //
 DELIMITER //
 CREATE PROCEDURE spu_bienes_registrar(
     IN _condicion        VARCHAR(20),
-    IN _modelo	         VARCHAR(40),
+    IN _modelo           VARCHAR(40),
     IN _numSerie         VARCHAR(30),
     IN _descripcion      TEXT,
-    IN _fotografia       BLOB,
-    IN _idMarca         INT,
+    IN _fotografia       VARCHAR(200), 
+    IN _idMarca          INT,
     IN _idUsuario        INT
+
 )
 BEGIN
-	INSERT INTO BIENES (condicion, modelo,numSerie,descripcion,fotografia,idMarca,idUsuario) 
-		VALUES
-        ( _condicion, _modelo,_numSerie,_descripcion,_fotografia,_idMarca,_idUsuario);
+    INSERT INTO BIENES (condicion, modelo, numSerie, descripcion, fotografia, idMarca, idUsuario) 
+    VALUES (_condicion, _modelo, _numSerie, _descripcion, _fotografia, _idMarca, _idUsuario);
 END //
 
 --PROCEDIMIENTO PARA REGISTRAR UNA ASIGNACIÓN--
@@ -321,8 +379,6 @@ BEGIN
         (  _idBien, _idColaborador,_inicio, _fin);
 END //
 
-SELECT*FROM vista_bienes_registrados;
-
 CALL spu_colaborador_registrar("2025-02-10","2025-06-15", 9,17,4);
 
 INSERT INTO AREAS(area)VALUES("Secretaria");
@@ -337,6 +393,10 @@ INSERT INTO PERSONA(apellidos,nombres,tipoDoc,nroDocumento,telefono,email,direcc
 INSERT INTO SUBCATEGORIAS(subcategoria,idCategoria)VALUES("laptop",1);
 INSERT INTO MARCAS(marca,idSubCategoria)VALUES("lenovo",1);
 INSERT INTO COLABORADORES(inicio,fin,idPersona,idArea,idRol)VALUES("2023-10-05","2026-05-10",1,1,1);
+
+INSERT INTO DETALLES(caracteristica,idCaracteristica,idconfiguracion)VALUES("nose que pone",2,1);
+
+SELECT * FROM CARACTERISTICAS;
 
 DELETE FROM bienes
 WHERE idbien = 16;

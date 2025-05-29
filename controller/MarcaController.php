@@ -17,7 +17,10 @@ if(isset($_SERVER['REQUEST_METHOD'])){
         echo json_encode($marca->getCategorias());
       } else if ($_GET["task"] == 'getsubCategorias') {
         echo json_encode($marca->getsubCategorias($_GET['idCategoria']));
-      }
+      } else if ($_GET["task"] == 'getById') {
+        echo json_encode($marca->getById($_GET["idMarca"]));
+    }
+    
       break;
       case "POST":
         //Obtener los datos enviados desde el cliente
@@ -34,23 +37,38 @@ if(isset($_SERVER['REQUEST_METHOD'])){
         $filasAfectadas=$marca->add($registro);
 
         //Notificamos al usuari el número de filas en formato JSON
-        //{"filas":1}
         header("Content-Type: application/json; charset=utf-8");
         echo json_encode(["filas"=>$filasAfectadas]);
       break;
-      case "DELETE":
-        header("Content-Type: application/json; charset=utf-8");
-        //El usuario enviará el id en la url => miurl.com/ideliminar
-        //PASO 1: Obtener la URL desde el cliente
-        $url= $_SERVER['REQUEST_URI'];
-        //Paso 2: convertir la URL en un array
-        $arrayURL=explode('/',$url);
-        //paso 3: obtener el id
-        $idMarca=end($arrayURL);
 
-        $filasafectadas=$marca-> delete (['idMarca'=>$idMarca]);
-        echo json_encode(['filas'=>$filasafectadas]);
+      case "PUT":
+        $input = file_get_contents("php://input");
+        $dataJSON = json_decode($input, true);
+  
+        $registro = [
+          "idMarca" => $dataJSON["idMarca"],
+          "marca" => $dataJSON["marca"],
+          "idSubCategoria"=> $dataJSON["idSubCategoria"],
+        ];
+
+        $filasAfectadas = $marca->update($registro);
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode(["filas" => $filasAfectadas]);
         break;
+
+      case "DELETE":
+      header("Content-Type: application/json; charset=utf-8");
+      //El usuario enviará el id en la url => miurl.com/ideliminar
+      //PASO 1: Obtener la URL desde el cliente
+      $url = $_SERVER['REQUEST_URI'];
+      //Paso 2: convertir la URL en un array
+      $arrayURL = explode('/', $url);
+      //paso 3: obtener el id
+      $idmarca = end($arrayURL);
+
+      $filasafectadas = $marca->delete(['idMarca' => $idmarca]);
+      echo json_encode(['filas' => $filasafectadas]);
+      break;
     
-  }
+      }
 }

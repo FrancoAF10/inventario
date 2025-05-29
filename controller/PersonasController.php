@@ -7,12 +7,13 @@ if(isset($_SERVER['REQUEST_METHOD'])){
 
   switch($_SERVER["REQUEST_METHOD"]){
     case "GET":
-      //sleep(3);
       header("Content-Type: application/json; charset=utf-8");
 
       //DEBEMOS IDENTIFICAR SI EL USUARIO REQUIERE LISTAR/BUSCAR
       if($_GET["task"]=='getAll'){
         echo json_encode($persona->getAll() );
+      }else if ($_GET["task"] == 'getById') {
+        echo json_encode($persona->getById($_GET['idPersona']));
       }
       break;
       case "POST":
@@ -35,10 +36,28 @@ if(isset($_SERVER['REQUEST_METHOD'])){
         $filasAfectadas=$persona->add($registro);
 
         //Notificamos al usuario el número de filas en formato JSON
-        //{"filas":1}
-        header("Content-Type: application/json; charset=utf-8");
+        header(header: "Content-Type: application/json; charset=utf-8");
         echo json_encode(["filas"=>$filasAfectadas]);
       break;
+      case "PUT":
+        $input = file_get_contents("php://input");
+        $dataJSON = json_decode($input, true);
+  
+        $registro=[
+          "apellidos"           =>$dataJSON["apellidos"],
+          "nombres"             =>$dataJSON["nombres"],
+          "tipoDoc"             =>$dataJSON["tipoDoc"],
+          "nroDocumento"        =>$dataJSON["nroDocumento"],
+          "telefono"            =>$dataJSON["telefono"],
+          "email"               =>$dataJSON["email"],
+          "direccion"           =>$dataJSON["direccion"],
+          "idPersona"           => $dataJSON["idPersona"],
+        ];
+  
+        $filasAfectadas = $persona->update($registro);
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode(["filas" => $filasAfectadas]);
+        break;
 
       case "DELETE":
         header("Content-Type: application/json; charset=utf-8");

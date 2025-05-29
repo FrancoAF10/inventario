@@ -17,9 +17,9 @@ class Usuarios{
   }
   public function getColaboradores(): array{
     $sql="SELECT * FROM vista_usuarios_colaboradores";
-    $stmt = $this->conexion->prepare($sql); //preparación
-    $stmt->execute(); //ejecución
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); //retorno
+    $stmt = $this->conexion->prepare($sql); 
+    $stmt->execute(); 
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   /**
@@ -42,8 +42,19 @@ class Usuarios{
     return $stmt->rowCount();
   }
   public function update($params = []): int{
-    return 0;
-  }
+    $sql="UPDATE USUARIOS SET nomUser=?, passUser=?, estado=?,idColaborador=? WHERE idUsuario=?";
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute(
+     array(
+       $params["nomUser"],
+       $params["passUser"],
+       $params["estado"],
+       $params["idColaborador"],
+       $params["idUsuario"],
+ 
+     )
+     );
+     return $stmt->rowCount();  }
   public function delete($params = []): int{
     $sql= "DELETE FROM USUARIOS WHERE idUsuario=? ";
     $stmt = $this->conexion->prepare($sql);
@@ -55,12 +66,12 @@ class Usuarios{
       );
     return $stmt->rowCount();
   }
-  public function getById ($idsuario): array{
+  public function getById ($idusuario): array{
     //obtenemos los datos mediante el id
-    $sql= "SELECT * FROM Areas WHERE id=?";
+    $sql= "SELECT * FROM USUARIOS WHERE idUsuario=?";
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute(
-      array($idsuario)
+      array($idusuario)
       );  
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }

@@ -17,10 +17,10 @@ class Marca{
   }
 
   public function getCategorias(): array {
-    $sql = "SELECT * FROM CATEGORIAS"; // Consulta para obtener las categorías
+    $sql = "SELECT * FROM CATEGORIAS";
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devolvemos todas las categorías
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
   }
   public function getsubCategorias($idCategoria): array {
     // Consulta para obtener las subcategorías dependiendo de que categoria se seleccione
@@ -50,22 +50,34 @@ class Marca{
      );
      return $stmt->rowCount();
    }
-   public function delete($params = []): int{
+   public function update($params = []): int{
+    $sql = "UPDATE MARCAS SET marca = ?,idSubCategoria=? WHERE idMarca = ?";
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute([
+        $params["marca"],
+        $params["idSubCategoria"],
+        $params["idMarca"]
+    ]);
+    return $stmt->rowCount();  
+  }
+  public function delete($params = []): int{
     $sql= "DELETE FROM MARCAS WHERE idMarca=? ";
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute(
       array(
         $params["idMarca"],
       )
-
       );
     return $stmt->rowCount();
   }
-  public function getById ($idMarcas): array{
-    $sql= "SELECT * FROM MARCAS WHERE id=?";
+  public function getById ($idMarca): array{
+    $sql= "SELECT m.*, s.idCategoria 
+           FROM MARCAS m 
+           INNER JOIN SUBCATEGORIAS s ON m.idSubCategoria = s.idSubCategoria
+           WHERE m.idMarca = ?";
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute(
-      array($idMarcas)
+      array($idMarca)
       );  
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }

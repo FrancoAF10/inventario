@@ -10,16 +10,16 @@ class Configuracion{
    * @return array
    */
   public function getAll(): array{
-    $sql="SELECT * FROM CONFIGURACIONES";
+    $sql="SELECT * FROM vista_configuraciones";
     $stmt = $this->conexion->prepare($sql); //preparación
     $stmt->execute(); //ejecución
     return $stmt->fetchAll(PDO::FETCH_ASSOC); //retorno
   }
   public function getCategorias(): array {
-    $sql = "SELECT * FROM CATEGORIAS"; // Consulta para obtener las categorías
+    $sql = "SELECT * FROM CATEGORIAS"; 
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devolvemos todas las categorías
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
 }
 
   /**
@@ -40,7 +40,14 @@ class Configuracion{
     return $stmt->rowCount();
   }
   public function update($params = []): int{
-    return 0;
+    $sql = "UPDATE CONFIGURACIONES SET configuracion = ? , idCategoria=? WHERE idConfiguracion = ?";
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute([
+      $params["configuracion"],
+      $params["idCategoria"],
+      $params["idConfiguracion"],
+    ]);
+    return $stmt->rowCount();  
   }
   public function delete($params = []): int{
     $sql= "DELETE FROM CONFIGURACIONES WHERE idConfiguracion=? ";
@@ -55,7 +62,7 @@ class Configuracion{
   }
   public function getById ($idconfiguracion): array{
     //obtenemos los datos mediante el id
-    $sql= "SELECT * FROM CONFIGURACIONES WHERE id=?";
+    $sql= "SELECT * FROM CONFIGURACIONES WHERE idConfiguracion=?";
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute(
       array($idconfiguracion)

@@ -7,10 +7,10 @@ class SubCategoria{
   }
 
   public function getCategorias(): array {
-    $sql = "SELECT * FROM CATEGORIAS"; // Consulta para obtener las categorías
+    $sql = "SELECT * FROM CATEGORIAS"; 
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devolvemos todas las categorías
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
 }
   public function getAll(): array{
     $sql="SELECT * FROM vista_categorias_subcategorias";
@@ -29,6 +29,16 @@ class SubCategoria{
      );
      return $stmt->rowCount();
    }
+   public function update($params = []): int{
+    $sql = "UPDATE SUBCATEGORIAS SET subCategoria = ?,idCategoria=? WHERE idSubCategoria = ?";
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute([
+        $params["subCategoria"],
+        $params["idCategoria"],
+        $params["idSubCategoria"]
+    ]);
+    return $stmt->rowCount();  
+  }
    public function delete($params = []): int{
     $sql= "DELETE FROM SUBCATEGORIAS WHERE idSubCategoria=? ";
     $stmt = $this->conexion->prepare($sql);
@@ -39,5 +49,14 @@ class SubCategoria{
 
       );
     return $stmt->rowCount();
+  }
+  public function getById ($idsubcategoria): array{
+    //obtenemos los datos mediante el id
+    $sql= "SELECT * FROM SUBCATEGORIAS WHERE idSubCategoria=?";
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute(
+      array($idsubcategoria)
+      );  
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 }

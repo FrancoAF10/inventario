@@ -32,10 +32,15 @@ class Categoria{
     return $stmt->rowCount();
   }
   public function update($params = []): int{
-    return 0;
+    $sql = "UPDATE CATEGORIAS SET categoria = ? WHERE idCategoria = ?";
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute([
+        $params["categoria"],
+        $params["idCategoria"]
+    ]);
+    return $stmt->rowCount();  
   }
   public function delete($params = []): int{
-    //tipos de eliminacion:fisica(delete) - lógica(update)
     $sql= "DELETE FROM CATEGORIAS WHERE idCategoria=? ";
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute(
@@ -48,7 +53,7 @@ class Categoria{
   }
   public function getById ($idcategoria): array{
     //obtenemos los datos mediante el id
-    $sql= "SELECT * FROM CATEGORIAS WHERE id=?";
+    $sql= "SELECT * FROM CATEGORIAS WHERE idCategoria=?";
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute(
       array($idcategoria)

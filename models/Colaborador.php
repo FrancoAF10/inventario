@@ -17,21 +17,21 @@ class Colaborador{
   }
   public function getAreas(): array{
     $sql="SELECT * FROM AREAS";
-    $stmt = $this->conexion->prepare($sql); //preparación
-    $stmt->execute(); //ejecución
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); //retorno
+    $stmt = $this->conexion->prepare($sql); 
+    $stmt->execute(); 
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
   }
   public function getPersonas(): array{
     $sql="SELECT * FROM PERSONA";
-    $stmt = $this->conexion->prepare($sql); //preparación
-    $stmt->execute(); //ejecución
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); //retorno
+    $stmt = $this->conexion->prepare($sql); 
+    $stmt->execute(); 
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
   }
   public function getRoles(): array{
     $sql="SELECT * FROM ROLES";
-    $stmt = $this->conexion->prepare($sql); //preparación
-    $stmt->execute(); //ejecución
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); //retorno
+    $stmt = $this->conexion->prepare($sql); 
+    $stmt->execute(); 
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
   }
 
   /**
@@ -54,7 +54,17 @@ class Colaborador{
     return $stmt->rowCount();
   }
   public function update($params = []): int{
-    return 0;
+    $sql = "UPDATE COLABORADORES SET inicio = ?,fin=?,idPersona=?,idArea=?,idRol=? WHERE idColaborador = ?";
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute([
+      $params["inicio"],
+      $params["fin"],
+      $params["idPersona"],
+      $params["idArea"],
+      $params["idRol"],
+      $params["idColaborador"],
+    ]);
+    return $stmt->rowCount();  
   }
   public function delete($params = []): int{
     $sql= "DELETE FROM COLABORADORES WHERE idColaborador=? ";
@@ -68,13 +78,14 @@ class Colaborador{
     return $stmt->rowCount();
   }
   public function getById ($idcolaborador): array{
-    $sql= "SELECT * FROM COLABORADORES WHERE id=?";
+    $sql= "SELECT * FROM COLABORADORES WHERE idColaborador=?";
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute(
       array($idcolaborador)
       );  
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+
   
 }
 

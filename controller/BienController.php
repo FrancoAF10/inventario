@@ -7,14 +7,17 @@ if(isset($_SERVER['REQUEST_METHOD'])){
 
   switch($_SERVER["REQUEST_METHOD"]){
     case "GET":
-      //sleep(3);
       header("Content-Type: application/json; charset=utf-8");
 
       //DEBEMOS IDENTIFICAR SI EL USUARIO REQUIERE LISTAR/BUSCAR
       if($_GET["task"]=='getAll'){
         echo json_encode($bien->getAll());
+      }else if($_GET["task"] == 'getCategorias') {
+        echo json_encode($bien->getCategorias());
+      }else if($_GET["task"] == 'getSubCategorias') {
+        echo json_encode($bien->getSubCategorias($_GET['idCategoria']));
       }else if($_GET["task"]=='getMarcas'){
-        echo json_encode($bien->getMarcas());
+        echo json_encode($bien->getMarcas($_GET['idSubCategoria']));
       }else if($_GET["task"]=='getUsuarios'){
         echo json_encode($bien->getUsuarios() );
       }else if($_GET["task"]=='getById'){

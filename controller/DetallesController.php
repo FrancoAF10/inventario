@@ -2,8 +2,8 @@
 
 if (isset($_SERVER['REQUEST_METHOD'])) {
 
-  require_once "../models/Caracteristica.php";
-  $caracteristica = new Caracteristica();
+  require_once "../models/detalles.php";
+  $detalle = new Detalle();
 
   switch ($_SERVER["REQUEST_METHOD"]) {
     case "GET":
@@ -11,17 +11,13 @@ if (isset($_SERVER['REQUEST_METHOD'])) {
 
       //DEBEMOS IDENTIFICAR SI EL USUARIO REQUIERE LISTAR/BUSCAR
       if ($_GET["task"] == 'getAll') {
-        echo json_encode($caracteristica->getAll());
-      } else if ($_GET["task"] == 'getCategorias') {
-        echo json_encode($caracteristica->getCategorias());
-      } else if ($_GET["task"] == 'getSubCategorias') {
-        echo json_encode($caracteristica->getSubCategorias($_GET['idCategoria']));
-      } else if ($_GET["task"] == 'getMarcas') {
-        echo json_encode($caracteristica->getMarcas($_GET['idSubCategoria']));
-      } else if ($_GET["task"] == 'getBienesPorMarca') {
-        echo json_encode($caracteristica->getBienesPorMarca($_GET['idMarca']));
-      }else if ($_GET["task"] == 'getById') {
-        echo json_encode($caracteristica->getById($_GET['idCaracteristica']));
+        echo json_encode($detalle->getAll());
+      }else if ($_GET["task"] == 'getCaracteristica') {
+        echo json_encode($detalle->getCaracteristica());
+      }else if ($_GET["task"] == 'getConfiguracion') {
+        echo json_encode($detalle->getConfiguracion());
+      } else if ($_GET["task"] == 'getById') {
+        echo json_encode($detalle->getById($_GET['idDetalle']));
       }
       break;
 
@@ -32,12 +28,12 @@ if (isset($_SERVER['REQUEST_METHOD'])) {
 
       //creamos un array asociativo con lo datos del nuevo registro 
       $registro = [
-        "segmento" => $dataJSON["segmento"],
-        "idBien" => $dataJSON["idBien"],
-
+        "caracteristica" => $dataJSON["caracteristica"],
+        "idCaracteristica" => $dataJSON["idCaracteristica"],
+        "idConfiguracion"=>$dataJSON["idConfiguracion"],
       ];
       //Obtenemos el número de registros
-      $filasAfectadas = $caracteristica->add($registro);
+      $filasAfectadas = $detalle->add($registro);
 
       //Notificamos al usuario el número de filas en formato JSON
       header("Content-Type: application/json; charset=utf-8");
@@ -49,12 +45,13 @@ if (isset($_SERVER['REQUEST_METHOD'])) {
       $dataJSON = json_decode($input, true);
 
       $registro = [
+        "caracteristica" => $dataJSON["caracteristica"],
         "idCaracteristica" => $dataJSON["idCaracteristica"],
-        "segmento" => $dataJSON["segmento"],
-        "idBien"    =>$dataJSON["idBien"],
+        "idConfiguracion"=> $dataJSON["idConfiguracion"],
+        "idDetalle" => $dataJSON["idDetalle"],
       ];
 
-      $filasAfectadas = $caracteristica->update($registro);
+      $filasAfectadas = $detalle->update($registro);
       header("Content-Type: application/json; charset=utf-8");
       echo json_encode(["filas" => $filasAfectadas]);
       break;
@@ -67,9 +64,9 @@ if (isset($_SERVER['REQUEST_METHOD'])) {
       //Paso 2: convertir la URL en un array
       $arrayURL = explode('/', $url);
       //paso 3: obtener el id
-      $idcaracteristica = end($arrayURL);
+      $iddetalle = end($arrayURL);
 
-      $filasafectadas = $caracteristica->delete(['idCaracteristica' => $idcaracteristica]);
+      $filasafectadas = $detalle->delete(['idDetalle' => $iddetalle]);
       echo json_encode(['filas' => $filasafectadas]);
       break;
 

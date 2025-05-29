@@ -18,19 +18,37 @@ class Bien
         return $stmt->fetchAll(PDO::FETCH_ASSOC); //retorno
       }
     
-    public function getMarcas(): array
+      public function getCategorias(): array {
+        $sql = "SELECT * FROM CATEGORIAS";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+      }
+      public function getSubCategorias($idCategoria): array {
+        // Consulta para obtener las subcategorías dependiendo de que categoria se seleccione
+        $sql = "SELECT * FROM vista_subcategorias_con_categorias WHERE idCategoria = ?"; 
+        $stmt = $this->conexion->prepare(query: $sql);
+        $stmt->execute(
+    
+          [$idCategoria]
+        );
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Devolvemos todas las subcategorías
+      }
+    public function getMarcas($idSubCategoria): array
     {
-        $sql = "SELECT * FROM MARCAS";
+        $sql = "SELECT * FROM vista_marcas_bien WHERE idSubCategoria = ?";
         $stmt = $this->conexion->prepare($sql); //preparación
-        $stmt->execute(); //ejecución
+        $stmt->execute(
+            [$idSubCategoria]
+        ); //ejecución
         return $stmt->fetchAll(PDO::FETCH_ASSOC); //retorno
     }
     public function getUsuarios(): array
     {
         $sql = "SELECT * FROM USUARIOS";
-        $stmt = $this->conexion->prepare($sql); //preparación
-        $stmt->execute(); //ejecución
-        return $stmt->fetchAll(PDO::FETCH_ASSOC); //retorno
+        $stmt = $this->conexion->prepare($sql); 
+        $stmt->execute(); 
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

@@ -13,8 +13,10 @@ if(isset($_SERVER['REQUEST_METHOD'])){
       if($_GET["task"]=='getAll'){
         echo json_encode($subcategoria->getAll() );
       }else if ($_GET["task"] == 'getCategorias') {
-        echo json_encode($subcategoria->getCategorias()); // Enviar las categorías en formato JSON
-    }
+        echo json_encode($subcategoria->getCategorias()); 
+      }else if ($_GET["task"] == 'getById') {
+        echo json_encode($subcategoria->getById($_GET["idSubCategoria"])); 
+      }
       break;
       case "POST":
         //Obtener los datos enviados desde el cliente
@@ -24,17 +26,32 @@ if(isset($_SERVER['REQUEST_METHOD'])){
         //creamos un array asociativo con lo datossd el nuevo registro 
         $registro=[
           "subCategoria"        =>$dataJSON["subCategoria"],
-          "idCategoria" =>$dataJSON["idCategoria"],
+          "idCategoria"         =>$dataJSON["idCategoria"],
 
         ];
         //Obtenemos el némero de registros
         $filasAfectadas=$subcategoria->add($registro);
 
         //Notificamos al usuari el número de filas en formato JSON
-        //{"filas":1}
         header("Content-Type: application/json; charset=utf-8");
         echo json_encode(["filas"=>$filasAfectadas]);
       break;  
+
+      case "PUT":
+        $input = file_get_contents("php://input");
+        $dataJSON = json_decode($input, true);
+  
+        $registro = [
+          "idSubCategoria" => $dataJSON["idSubCategoria"],
+          "subCategoria" => $dataJSON["subCategoria"],
+          "idCategoria"=> $dataJSON["idCategoria"],
+        ];
+  
+        $filasAfectadas = $subcategoria->update($registro);
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode(["filas" => $filasAfectadas]);
+        break;
+
       case "DELETE":
         header("Content-Type: application/json; charset=utf-8");
         //El usuario enviará el id en la url => miurl.com/ideliminar

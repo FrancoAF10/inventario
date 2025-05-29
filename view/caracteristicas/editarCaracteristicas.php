@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Document</title>
-</head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+</head>
 <body>
     <div class="container my-5">
         <form action="" method="" id="formulario-registrar" >
-            <h2 class="text-center mb-4">Agregar Caracteristicas:</h2>
+            <h2 class="text-center mb-4">ACTUALIZACIÓN DE DATOS:</h2>
             <div class="card">
-                <div class="card-header bg-info"><strong>REGISTRAR</strong></div>
+                <div class="card-header bg-info"><strong>ACTUALIZAR</strong></div>
                 <div class="card-body">
                     <div class="row">
                     <div class="col-md-12 mb-3">
                         <div class="form-floating">
-                            <input type="text" id="segmento" name="caracteristica" class="form-control" placeholder="Segmento" required>
+                            <input type="text" id="segmento" name="segmento" class="form-control" placeholder="Segmento" required>
                             <label for="segmento" class="form-label">Segmento:</label>
                     </div>
                     </div>
@@ -64,21 +64,39 @@
                     </div>
                 </div>
                 <div class="card-footer d-grid gap-2">
-                    <button class="btn btn-primary" id="addCaracteristica">Agregar</button>
+                    <button class="btn btn-primary" id="addCaracteristica">ACTUALIZAR</button>
                 </div>
             </div>
         </form>
     </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const categoriaSelect = document.querySelector("#Categoria");
-        const subCategoriaSelect = document.querySelector("#SubCategoria");
-        const marcaSelect = document.querySelector("#marca");
-        const bienes = document.querySelector("#bienes");
+document.addEventListener("DOMContentLoaded", () => {
+    // Obtener el registro existente para cargarlo en el formulario
+    function obtenerRegistro() {
+      const URL = new URLSearchParams(window.location.search);
+      const idsegmento = URL.get('id');
+      const categoriaSelect = document.querySelector("#Categoria");
+      const subCategoriaSelect = document.querySelector("#SubCategoria");
+      const marcaSelect = document.querySelector("#marca");
+      const bienes = document.querySelector("#bienes");
 
+      const parametros = new URLSearchParams();
+      parametros.append("task", "getById");
+      parametros.append("idCaracteristica", idsegmento);
 
-      // Cargar Categorías
+      fetch(`../../controller/CaracteristicaController.php?${parametros}`, { method: 'GET' })
+        .then(response => response.json())
+        .then(data => {
+          if (data.length > 0) {
+            document.getElementById("segmento").value = data[0].segmento;
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+         // Cargar Categorías
       fetch("../../controller/CaracteristicaController.php?task=getCategorias")
         .then(response => response.json())
         .then(data => {
@@ -143,57 +161,66 @@
             console.error(error);
           });
       });
-
-
-
-     
-    });
-
-    //NUEVO REGISTRO
-    const formulario = document.querySelector("#formulario-registrar");
-    function registrarCaracteristica() {
-      const idBien = parseInt(document.querySelector('#bienes').value);
-      const segmento=document.querySelector("#segmento").value
-
-
-      fetch(`../../controller/CaracteristicaController.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            segmento,
-            idBien,
-        })
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.filas > 0) {
-            formulario.reset();
-            alert("Guardado correctamente");
-          } else {
-            alert("Error al guardar. Intente nuevamente.");
-          }
-        })
-        .catch(error => {
-          console.error(error);
-          alert("Error de red o servidor.");
-        });
     }
 
-    //formulario=botonb[submit](validar Front)
-    formulario.addEventListener("submit", function (event) {
-      event.preventDefault();//cancela el evento
+    
+    obtenerRegistro();
+    const formulario = document.getElementById('formulario-registrar');
+    formulario.addEventListener('submit', function (event) {
+      event.preventDefault();
 
-      if (confirm("¿Está seguro de registrar?")) {
-        registrarCaracteristica();
-      }
+      const idsegmento = new URLSearchParams(window.location.search).get('id');
+      const segmento = document.getElementById('segmento').value;
+      const idbien = document.getElementById('bienes').value;
+
+
+      Swal.fire({
+        title: 'CARACTERISTICAS',
+        text: '¿Está seguro de actualizar?',
+        icon: 'question',
+        footer: 'SENATI ING. SOFTWARE',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#2980b9',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const datos = {
+            idCaracteristica: idsegmento,
+            segmento: segmento,
+            idBien:idBien
+          };
+          fetch('../../controller/CaracteristicaController.php', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.filas > 0) {
+                Swal.fire({
+                  title: 'ACTUALIZADO',
+                  text: 'Caracteristicas actualizada',
+                  icon: 'success',
+                  footer: 'SENATI ING. SOFTWARE',
+                  confirmButtonText: 'OK',
+                  confirmButtonColor: '#2980b9',
+                }).then(() => {
+                  // Redirigir después de aceptar el mensaje de éxito
+                  window.location.href = "../../view/caracteristicas/listarCaracteristicas.php";
+                });
+              }
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        }
+      });
     });
-
-  </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+  });
+</script>
 
 </body>
-
 </html>

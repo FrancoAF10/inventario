@@ -32,7 +32,13 @@ class Area{
     return $stmt->rowCount();
   }
   public function update($params = []): int{
-    return 0;
+    $sql = "UPDATE Areas SET area = ? WHERE idArea = ?";
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute([
+        $params["area"],
+        $params["idArea"]
+    ]);
+    return $stmt->rowCount();  
   }
   public function delete($params = []): int{
     $sql= "DELETE FROM Areas WHERE idArea=? ";
@@ -47,7 +53,7 @@ class Area{
   }
   public function getById ($idarea): array{
     //obtenemos los datos mediante el id
-    $sql= "SELECT * FROM Areas WHERE id=?";
+    $sql= "SELECT * FROM Areas WHERE idArea=?";
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute(
       array($idarea)

@@ -32,7 +32,13 @@ class Roles{
     return $stmt->rowCount();
   }
   public function update($params = []): int{
-    return 0;
+    $sql = "UPDATE ROLES SET rol = ? WHERE idRol = ?";
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute([
+        $params["rol"],
+        $params["idRol"]
+    ]); 
+    return $stmt->rowCount();  
   }
   public function delete($params = []): int{
     $sql= "DELETE FROM ROLES WHERE idRol=? ";
@@ -46,7 +52,7 @@ class Roles{
     return $stmt->rowCount();
   }
   public function getById ($idrol): array{
-    $sql= "SELECT * FROM ROLES WHERE id=?";
+    $sql= "SELECT * FROM ROLES WHERE idRol=?";
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute(
       array($idrol)
