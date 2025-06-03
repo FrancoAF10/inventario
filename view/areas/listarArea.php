@@ -67,7 +67,7 @@
   </div>
 </nav>
 <!--FIN DE NAVBAR-->
-<div class="container ">
+<div class="container mt-5">
    
 <h2 class="text-center mt-3">GESTIÓN DE AREAS</h2>
   <button id="pgaddArea" type="button" onclick="window.location.href='././registrarArea.php'" class="btn btn-success"><i class="fa-solid fa-plus"></i> NUEVA AREA </button>
@@ -129,29 +129,66 @@
     })
     .catch(error =>{console.error(error)});
   }
-  document.addEventListener("DOMContentLoaded",()=>{
-    obtenerDatos();
+  document.addEventListener("DOMContentLoaded", () => {
+  obtenerDatos();
 
-    tabla.addEventListener("click",(event)=>{
+  tabla.addEventListener("click", (event) => {
+    const enlace = event.target.closest("a");
+    if (enlace && enlace.classList.contains("delete")) {
+      event.preventDefault();
+      const idarea = enlace.getAttribute("data-idarea");
 
-      const enlace=event.target.closest('a');//referencia a la etiqueta <a> mas cercana
-      if(enlace && enlace.classList.contains('delete')){
-        event.preventDefault();
-        const idarea=enlace.getAttribute('data-idarea');
-          if(confirm("¿Está seguro de eliminar el registro?")){
-            fetch(`../../controller/AreaController.php/${idarea}`,{method:'DELETE'})
-            .then(response =>{return response.json()})
-            .then(datos=>{
-              if(datos.filas>0){
-                const filaEliminar=enlace.closest('tr');
-                if (filaEliminar){filaEliminar.remove();}
-              }
-            })
-            .catch(error=>{console.error(error)});
-          }
-      }
-    });
+      // SweetAlert2 confirmación
+      Swal.fire({
+        title: "¿Está seguro?",
+        text: "¡Esta acción no se puede revertir!",
+        icon: "warning",
+        footer: 'SENATI ING. SOFTWARE',
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`../../controller/AreaController.php/${idarea}`, {
+            method: 'DELETE'
+          })
+          .then(response => response.json())
+          .then(datos => {
+            if (datos.filas > 0) {
+              const filaEliminar = enlace.closest('tr');
+              if (filaEliminar) filaEliminar.remove();
+
+              Swal.fire({
+                icon: 'success',
+                title: '¡Eliminado!',
+                text: 'El área ha sido eliminada correctamente.'
+              }).then(() => {
+                window.location.href = "../../view/areas/listarArea.php";
+              });
+
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo eliminar el área.'
+              });
+            }
+          })
+          .catch(error => {
+            console.error(error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Ocurrió un problema al eliminar el área.'
+            });
+          });
+        }
+      });
+    }
   });
+});
 </script>
 </body>
 </html>

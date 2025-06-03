@@ -66,7 +66,7 @@
   </div>
 </nav>
 <!--FIN DE NAVBAR-->
-<div class="container ">
+<div class="container mt-5">
    <h2 class="text-center mt-3">GESTIÓN DE CATEGORIAS</h2>
   <button id="pgaddCategoria" type="button" onclick="window.location.href='././registrarCategoria.php'" class="btn btn-success"><i class="fa-solid fa-plus"></i> NUEVA CATEGORIA</button>
     <hr>

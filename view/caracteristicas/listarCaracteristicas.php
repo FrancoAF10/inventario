@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Document</title>
 </head>
 <body>
   <!--INICIO DE NAVBAR-->
@@ -65,11 +66,10 @@
 </nav>
 <!--FIN DE NAVBAR-->
     <div class="container mt-5">
-<button id="pgaddcaracteristicas" type="button" onclick="window.location.href='././registrarCaracteristicas.php'">Agregar Caracteristica</button>
-    
+      <h2 class="text-center">GESTIÓN DE CARACTERISTICAS</h2>
+<button id="pgaddcaracteristicas" type="button" onclick="window.location.href='././registrarCaracteristicas.php'" class="btn btn-success" ><i class="fa-solid fa-plus"></i> Agregar Caracteristica</button>
     <hr>
 
-    <h3>Caracteristicas Registradas</h3>
     <div class="card mt-3">
       <div class="card-header bg-info"><strong>CARACTERISTICAS REGISTRADAS</strong></div>
       <div class="card-body">

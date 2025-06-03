@@ -67,7 +67,7 @@
   </div>
 </nav>
 <!--FIN DE NAVBAR-->
-<div class="container my-5">
+<div class="container mt-5">
   <h2 class="text-center mt-3">GESTIÓN DE ROLES</h2>
   <button id="pgaddRol" type="button" onclick="window.location.href='././registrarRol.php'" class="btn btn-success"><i class="fa-solid fa-plus"></i> NUEVO ROL</button>
     <hr>

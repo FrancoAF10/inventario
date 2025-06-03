@@ -67,7 +67,7 @@
   </div>
 </nav>
 <!--FIN DE NAVBAR-->
-<div class="container ">
+<div class="container mt-5  ">
    
 <h2 class="text-center mt-3">GESTIÓN DE DETALLES</h2>
   <button id="pgaddDetalles" type="button" onclick="window.location.href='././registrarDetalles.php'" class="btn btn-success"><i class="fa-solid fa-plus"></i> AGREGAR DETALLES </button>

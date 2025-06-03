@@ -68,11 +68,10 @@
 <!--FIN DE NAVBAR-->
 <div class="container mt-4">
         <form action="" method="">
-        <h1 class=" text-center mt-5">GESTIÓN DE USUARIOS</h1>
-        <br>
+        <h2 class=" text-center mt-5">GESTIÓN DE USUARIOS</h2>
         <button id="pgaddUsuarios" type="button" onclick="window.location.href='././agregarUsuario.php'" class="btn btn-success"><i class="fa-solid fa-plus"></i> NUEVO USUARIO</button>
         <hr>
-        <div class="card mt-3">
+        <div class="card">
             <div class="card-header bg-info">
                 <strong>USUARIOS REGISTRADOS</strong>
             </div>

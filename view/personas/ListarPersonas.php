@@ -64,7 +64,7 @@
   </div>
 </nav>
 <!--FIN DE NAVBAR-->
-<div class="container">
+<div class="container mt-5">
   <h2 class="text-center mt-3">GESTIÓN DE PERSONAS</h2>
   <button id="pgaddpersonas" type="button" onclick="window.location.href='././RegistrarPersonas.php'" class="btn btn-success" ><i class="fa-solid fa-plus"></i> NUEVA PERSONA</button>
   <hr>

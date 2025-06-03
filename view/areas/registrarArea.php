@@ -12,6 +12,62 @@
 </head>
 
 <body>
+  <!--INICIO DE NAVBAR-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="../index.html">Inventario</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav w-100 d-flex flex-wrap justify-content-between">
+
+        <li class="nav-item">
+          <a class="nav-link" href="../areas/listarArea.php">Áreas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../roles/ListarRoles.php">Roles</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../categorias/listarCategoria.php">Categorías</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../SubCategoria/ListarSubcategorias.php">Subcategorías</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../marcas/ListarMarcas.php">Marcas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../personas/ListarPersonas.php">Personas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../colaboradores/listarColaboradores.php">Colaboradores</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../usuarios/listarUsuarios.php">Usuarios</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../bienes/listarBien.php">Bienes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../asignaciones/listarAsignaciones.php">Asignaciones</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../caracteristicas/listarCaracteristicas.php">Características</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="./listarDetalles.php">Detalles</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../configuracion/listarConfiguracion.php">Configuraciones</a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+<!--FIN DE NAVBAR-->
   <div class="container">
     <form action="" autocomplete="off" id="formulario-registrar">
       <h2 class="text-center mt-3">REGISTRAR ÁREA</h2>

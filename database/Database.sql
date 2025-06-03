@@ -379,6 +379,21 @@ BEGIN
         (  _idBien, _idColaborador,_inicio, _fin);
 END //
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 CALL spu_colaborador_registrar("2025-02-10","2025-06-15", 9,17,4);
 
 INSERT INTO AREAS(area)VALUES("Secretaria");
