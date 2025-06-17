@@ -79,9 +79,17 @@ class Asignaciones
     );
     return $stmt->rowCount();
   }
-  public function update($params = []): int
-  {
-    return 0;
+  public function update($params = []): int{
+    $sql = "UPDATE ASIGNACIONES SET inicio = ?, fin=?, idBien=?,idColaborador=? WHERE idAsignacion = ?";
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute([
+        $params["inicio"],
+        $params["fin"],
+        $params["idBien"],
+        $params["idColaborador"],
+        $params["idAsignacion"]
+    ]);
+    return $stmt->rowCount();  
   }
   public function delete($params = []): int
   {
@@ -95,16 +103,12 @@ class Asignaciones
     );
     return $stmt->rowCount();
   }
-  public function getById($idasignacion): array
-  {
-    //obtenemos los datos mediante el id
-    $sql = "SELECT * FROM ASIGNACIONES WHERE id=?";
+public function getById($idAsignacion): array
+{
+    $sql = "SELECT * FROM vistaAsignaciones_actualizar WHERE idAsignacion = ?";
     $stmt = $this->conexion->prepare($sql);
-    $stmt->execute(
-      array($idasignacion)
-    );
+    $stmt->execute([$idAsignacion]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-  }
-
 }
 
+}

@@ -91,7 +91,20 @@ class Caracteristica{
   }
   public function getById ($idcaracteristica): array{
     //obtenemos los datos mediante el id
-    $sql= "SELECT * FROM CARACTERISTICAS WHERE idCaracteristica=?";
+    $sql= "SELECT 
+    C.idCaracteristica,
+    C.segmento,
+    B.idBien,
+    M.idMarca,
+    S.idSubCategoria,
+    CA.idCategoria
+FROM CARACTERISTICAS C
+INNER JOIN BIENES B ON C.idBien = B.idBien
+INNER JOIN MARCAS M ON B.idMarca = M.idMarca
+INNER JOIN SUBCATEGORIAS S ON M.idSubCategoria = S.idSubCategoria
+INNER JOIN CATEGORIAS CA ON S.idCategoria = CA.idCategoria
+WHERE C.idCaracteristica = ?
+";
     $stmt = $this->conexion->prepare($sql);
     $stmt->execute(
       array($idcaracteristica)

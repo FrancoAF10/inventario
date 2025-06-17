@@ -1,57 +1,84 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Actualizar Subcategoría</title>
+
+  <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Document</title>
+
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .btn {
+      transition: all 0.3s ease-in-out;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
 </head>
+
 <body>
-<div class="container">
-    <form action="" method="post" id="formulario-registro" autocomplete="off">
-      
-      <h2 class="text-center mt-3">ACTUALIZACIÓN DE DATOS</h2>
-      <hr>
-      <div class="card mt-3">
-        <div class="card-header bg-info"><strong>ACTUALIZAR SUBCATEGORIA</strong></div>
+ <?php include_once(__DIR__ . '/../../layouts/navbar.php'); ?>
+
+  <div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="text-primary">Actualizar Subcategoría</h2>
+      <button onclick="window.location.href='./ListarSubcategorias.php'" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i> Volver
+      </button>
+    </div>
+
+    <form id="formulario-registro" autocomplete="off">
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          <strong>Formulario de Actualización</strong>
+        </div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-                <select id="categoriaSelect" class="form-select" required>
-                  <option value="">Selecciona una categoría</option>
-                </select>
-                <label for="CategoriaSelect" class="form-label">Seleccionar Categoría:</label>
-              </div>
-            </div>
+          <div class="form-floating mb-3">
+            <select id="categoriaSelect" class="form-select" required>
+              <option value="">Selecciona una categoría</option>
+            </select>
+            <label for="categoriaSelect">Seleccionar Categoría</label>
           </div>
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-                <input type="text" id="subCategoria" name="subcategoria" class="form-control" placeholder="Subcategoria"
-                  required>
-                <label for="subcategoria" class="form-label">Subcategoría:</label>
-              </div>
-            </div>
+          <div class="form-floating mb-3">
+            <input type="text" id="subCategoria" name="subcategoria" class="form-control" placeholder="Subcategoría" required />
+            <label for="subCategoria">Subcategoría</label>
           </div>
         </div>
-        <div class="card-footer d-grid gap-2">
-          <button class="btn btn-primary" id="addSubcategoria" type="submit">Actualizar Subcategoría</button>
+        <div class="card-footer text-end">
+          <button class="btn btn-primary" type="submit">
+            <i class="fa-solid fa-floppy-disk me-1"></i> Guardar Cambios
+          </button>
         </div>
       </div>
     </form>
   </div>
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // Cargar las categorías primero
-    function cargarCategorias() {
-        return new Promise((resolve, reject) => {
-        const parametros = new URLSearchParams();
-        parametros.append("task", "getCategorias");
 
-        fetch(`../../controller/SubCategoriaController.php?${parametros}`, { method: 'GET' })
-          .then(response => response.json())
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Obtener id subcategoría de la URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const idsubcategoria = urlParams.get("id");
+
+      // Cargar categorías en el select
+      function cargarCategorias() {
+        return fetch('../../controller/SubCategoriaController.php?task=getCategorias')
+          .then(res => res.json())
           .then(data => {
             const select = document.getElementById("categoriaSelect");
             data.forEach(categoria => {
@@ -60,99 +87,83 @@
               option.textContent = categoria.categoria;
               select.appendChild(option);
             });
-            resolve();  
-          })
-          .catch(error => {
-            console.error( error);
           });
-      });
-    }
+      }
 
-    // Obtener los datos de la subcategoría
-    function obtenerRegistro() {
-      const URL = new URLSearchParams(window.location.search);
-      const idsubcategoria = URL.get('id');
+      // Obtener datos actuales de la subcategoría
+      function cargarDatosSubcategoria() {
+        return fetch(`../../controller/SubCategoriaController.php?task=getById&idSubCategoria=${idsubcategoria}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.length > 0) {
+              document.getElementById("subCategoria").value = data[0].subCategoria;
+              document.getElementById("categoriaSelect").value = data[0].idCategoria;
+            }
+          });
+      }
 
-      const parametros = new URLSearchParams();
-      parametros.append("task", "getById");
-      parametros.append("idSubCategoria", idsubcategoria);
+      // Ejecutar carga de categorías y luego cargar datos de la subcategoría
+      cargarCategorias().then(() => cargarDatosSubcategoria());
 
-      fetch(`../../controller/SubCategoriaController.php?${parametros}`, { method: 'GET' })
-        .then(response => response.json())
-        .then(data => {
-          if (data.length > 0) {
-            // Asignar valores a los campos del formulario
-            document.getElementById("subCategoria").value = data[0].subCategoria;
-            document.getElementById("categoriaSelect").value = data[0].idCategoria;  // Asignar la categoría correcta
-          }
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }
+      //envío del formulario
+      document.getElementById("formulario-registro").addEventListener("submit", function (e) {
+        e.preventDefault();
 
-    // Ejecutar la carga de categorías y luego obtener el registro
-    cargarCategorias().then(() => {
-      obtenerRegistro();
-    });
+        const subcategoria = document.getElementById("subCategoria").value.trim();
+        const idCategoria = document.getElementById("categoriaSelect").value;
 
-    const formulario = document.getElementById('formulario-registro');
-
-    formulario.addEventListener('submit', function (event) {
-      event.preventDefault();
-
-      const idsubcategoria = new URLSearchParams(window.location.search).get('id');
-      const subcategoria = document.getElementById('subCategoria').value;
-      const idCategoria = document.getElementById('categoriaSelect').value;
-
-      Swal.fire({
-        title: 'SUBCATEGORIA',
-        text: '¿Está seguro de actualizar?',
-        icon: 'question',
-        footer: 'SENATI ING. SOFTWARE',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#2980b9',
-        showCancelButton: true,
-        cancelButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const datos = {
-            idSubCategoria: idsubcategoria,
-            subCategoria: subcategoria,
-            idCategoria: idCategoria
-          };
-
-          fetch('../../controller/SubCategoriaController.php', {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datos)
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.filas > 0) {
-                Swal.fire({
-                  title: 'ACTUALIZADO',
-                  text: 'Subcategoría actualizada',
-                  icon: 'success',
-                  footer: 'SENATI ING. SOFTWARE',
-                  confirmButtonText: 'OK',
-                  confirmButtonColor: '#2980b9',
-                }).then(() => {
-                  // Redirigir después de aceptar el mensaje de éxito
-                  window.location.href = "../../view/SubCategoria/ListarSubcategorias.php";
-                });
-              }
-            })
-            .catch(error => {
-              console.error(error);
-            });
+        if (!subcategoria) {
+          Swal.fire("Campo vacío", "Por favor ingrese una subcategoría.", "warning");
+          return;
         }
+
+        if (!idCategoria) {
+          Swal.fire("Campo vacío", "Por favor seleccione una categoría.", "warning");
+          return;
+        }
+
+        Swal.fire({
+          title: '¿Actualizar subcategoría?',
+          text: "Esta acción modificará la información.",
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#0d6efd',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Sí, actualizar',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch('../../controller/SubCategoriaController.php', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ idSubCategoria: idsubcategoria, subCategoria: subcategoria, idCategoria: idCategoria })
+            })
+              .then(res => res.json())
+              .then(data => {
+                if (data.filas > 0) {
+                  Swal.fire({
+                    title: 'Actualizado',
+                    text: 'Subcategoría actualizada correctamente.',
+                    icon: 'success',
+                    confirmButtonColor: '#198754'
+                  }).then(() => {
+                    window.location.href = "./ListarSubcategorias.php";
+                  });
+                } else {
+                  Swal.fire("Sin cambios", "No se actualizó el registro.", "info");
+                }
+              })
+              .catch(err => {
+                console.error("Error al actualizar:", err);
+                Swal.fire("Error", "No se pudo actualizar la subcategoría.", "error");
+              });
+          }
+        });
       });
     });
-  });
-</script>
+  </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
+
 </html>

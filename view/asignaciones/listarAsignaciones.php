@@ -1,180 +1,170 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <!--Font Awesone-->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gestión de Asignaciones</title>
 
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .navbar-brand {
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .card-header {
+      background-color: #0d6efd;
+      color: white;
+      font-weight: bold;
+    }
+    .btn {
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+    th, td {
+      vertical-align: middle;
+    }
+  </style>
 </head>
-
 <body>
-<!--INICIO DE NAVBAR-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Inventario</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
+
+<?php include_once(__DIR__ . '/../../layouts/navbar.php'); ?>
+
+<div class="container my-5">
+  <h2 class="text-center text-primary mb-4">Gestión de Asignaciones</h2>
+
+  <div class="text-end mb-3">
+    <button class="btn btn-success" onclick="location.href='./agregarAsignaciones.php'">
+      <i class="fa-solid fa-plus me-1"></i> Nueva Asignación
     </button>
+  </div>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav w-100 d-flex flex-wrap justify-content-between">
-
-        <li class="nav-item">
-          <a class="nav-link" href="../areas/listarArea.php">Áreas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../roles/ListarRoles.php">Roles</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../categorias/listarCategoria.php">Categorías</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../SubCategoria/ListarSubcategorias.php">Subcategorías</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../marcas/ListarMarcas.php">Marcas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../personas/ListarPersonas.php">Personas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../colaboradores/listarColaboradores.php">Colaboradores</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../usuarios/listarUsuarios.php">Usuarios</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../bienes/listarBien.php">Bienes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./listarAsignaciones.php">Asignaciones</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../caracteristicas/listarCaracteristicas.php">Características</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../detalles/listarDetalles.php">Detalles</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../configuracion/listarConfiguracion.php">Configuraciones</a>
-        </li>
-
-      </ul>
+  <div class="card shadow">
+    <div class="card-header">ASIGNACIONES REGISTRADAS</div>
+    <div class="card-body table-responsive">
+      <table class="table table-bordered table-hover align-middle" id="tabla-Asignaciones">
+        <colgroup>
+          <col style="width: 7%;">
+          <col style="width: 35%;">
+          <col style="width: 28%;">
+          <col style="width: 15%;">
+          <col style="width: 15%;">
+          <col style="width: 10%;">
+        </colgroup>
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Bien</th>
+            <th>Colaborador</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Datos dinámicos -->
+        </tbody>
+      </table>
     </div>
   </div>
-</nav>
-<!--FIN DE NAVBAR-->
-  <div class="container mt-5">
-    <h2 class="text-center">GESTIÓN DE ASIGNACIONES</h2>
-    <button id="pgaddAsignacion" type="button" onclick="window.location.href='././agregarAsignaciones.php'" class="btn btn-success"><i class="fa-solid fa-plus"></i> NUEVA ASIGNACIÓN </button>
-    <hr>
+</div>
 
-    <div class="card mt-3">
-      <div class="card-header bg-info"><strong>ASIGNACIONES REGISTRADAS</strong></div>
-      <div class="card-body">
-        <table class="table table-bordered table-striped w-100" id="tabla-Asignaciones">
-          <colgroup>
-            <col style="width:5%;"><!--id-->
-            <col style="width:30%;"><!--Bien-->
-            <col style="width:25%;"><!--colaborador-->
-            <col style="width:20%;"><!--fecha inico-->
-            <col style="width:20%;"><!--fecha fin-->
+<script>
+  const tabla = document.querySelector("#tabla-Asignaciones tbody");
 
-          </colgroup>
-          <thead>
-            <tr class="text-center align-middle">
-              <th>ID</th>
-              <th>BIEN</th>
-              <th>COLABORADOR</th>
-              <th>FECHA INICIO</th>
-              <th>FECHA FIN</th>
-              <th>ACCIONES</th>
-
+  function obtenerDatos() {
+    fetch(`../../controller/AsignacionesController.php?task=getAll`)
+      .then(response => response.json())
+      .then(data => {
+        tabla.innerHTML = '';
+        data.forEach(element => {
+          tabla.innerHTML += `
+            <tr>
+              <td class="text-center">${element.idAsignacion}</td>
+              <td>
+                <b>Categoria:</b> ${element.categoria}<br>
+                <b>Subcategoria:</b> ${element.subCategoria}<br>
+                <b>Marca:</b> ${element.marca}<br>
+                <b>Modelo:</b> ${element.modelo}<br>
+                <b>N° Serie:</b> ${element.numSerie}<br>
+                <b>Descripción:</b> ${element.descripcion}
+              </td>
+              <td>
+                <b>Persona:</b> ${element.nombres} ${element.apellidos}<br>
+                <b>Área:</b> ${element.area}<br>
+                <b>Rol:</b> ${element.rol}
+              </td>
+              <td class="text-center">${element.inicio}</td>
+              <td class="text-center">${element.fin}</td>
+              <td class="text-center">
+                <a href="editarAsignaciones.php?id=${element.idAsignacion}" class="btn btn-outline-info btn-sm me-1" title="Editar">
+                  <i class="fa-solid fa-pencil"></i>
+                </a>
+                <a href="#" class="btn btn-outline-danger btn-sm delete" data-idasignacion="${element.idAsignacion}" title="Eliminar">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </td>
             </tr>
-          </thead>
+          `;
+        });
+      })
+      .catch(error => console.error(error));
+  }
 
-          <tbody>
-            <!-- Contenido de forma dinámica -->
-          </tbody>
+  document.addEventListener("DOMContentLoaded", () => {
+    obtenerDatos();
 
-        </table>
-      </div>
-    </div>
+    tabla.addEventListener("click", (event) => {
+      const enlace = event.target.closest("a.delete");
+      if (enlace) {
+        event.preventDefault();
+        const idasignacion = enlace.getAttribute("data-idasignacion");
 
-    <script>
-      //OBTENEMOS TODOS LOS DATOS
-      const tabla = document.querySelector("#tabla-Asignaciones tbody");
-      function obtenerDatos() {
-        fetch(`../../controller/AsignacionesController.php?task=getAll`, {
-          method: 'GET'
-        })
-          .then(response => { return response.json() })
-          .then(data => {
-            tabla.innerHTML = ``;
-            data.forEach(element => {
-              tabla.innerHTML += `
-        <tr>
-          <td class="text-center align-middle">${element.idAsignacion}</td>
-          <td>
-            <div class="ms-3">
-              <span class="info-line"><b>Categoria:</b> ${element.categoria}</span><br>
-              <span class="info-line"><b>Subcategoria:</b> ${element.subCategoria}</span><br>
-              <span class="info-line"><b>Marca:</b> ${element.marca}</span><br>
-              <span class="info-line"><b>Modelo:</b> ${element.modelo}</span><br>
-              <span class="info-line"><b>N° Serie:</b> ${element.numSerie}</span><br>
-              <span class="info-line"><b>Descripción:</b> ${element.descripcion}</span>
-            </div>
-          </td> 
-          <td>
-            <div class="mt-4 ms-3">
-              <span class="info-line"><b>Persona:</b> ${element.nombres} ${element.apellidos}</span><br>
-              <span class="info-line"><b>Área:</b> ${element.area}</span><br>
-              <span class="info-line"><b>Rol:</b> ${element.rol}</span><br>
-            </div>
-          </td>
-          <td class="text-center align-middle">${element.inicio}</td>
-          <td class="text-center align-middle">${element.fin}</td>
-
-          <td class="text-center align-middle">
-          
-            <a href='editarAsignaciones.php?id=${element.idAsignacion}' title='Editar' class='btn btn-info btn-sm edit'><i class="fa-solid fa-pencil"></i></a>
-            <a href='#' title='Eliminar' data-idasignacion='${element.idAsignacion}' class='btn btn-danger btn-sm delete'><i class="fa-solid fa-trash"></i></a>
-            
-          </td>
-
-        </tr>
-        `;
-            });
-          })
-          .catch(error => { console.error(error) });
-      }
-      document.addEventListener("DOMContentLoaded", () => {
-        obtenerDatos();
-        tabla.addEventListener("click", (event) => {
-
-          const enlace = event.target.closest('a');
-          if (enlace && enlace.classList.contains('delete')) {
-            event.preventDefault();
-            const idasignacion = enlace.getAttribute('data-idasignacion');
-            if (confirm("¿Está seguro de eliminar el registro?")) {
-              fetch(`../../controller/AsignacionesController.php/${idasignacion}`, { method: 'DELETE' })
-                .then(response => { return response.json() })
-                .then(datos => {
-                  if (datos.filas > 0) {
-                    const filaEliminar = enlace.closest('tr');
-                    if (filaEliminar) { filaEliminar.remove(); }
-                  }
-                })
-                .catch(error => { console.error(error) });
-            }
+        Swal.fire({
+          title: "¿Está seguro?",
+          text: "¡Esta acción no se puede revertir!",
+          icon: "warning",
+          footer: 'SENATI ING. SOFTWARE',
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí, eliminar",
+          cancelButtonText: "Cancelar"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`../../controller/AsignacionesController.php/${idasignacion}`, { method: 'DELETE' })
+              .then(response => response.json())
+              .then(datos => {
+                if (datos.filas > 0) {
+                  enlace.closest('tr').remove();
+                  Swal.fire("¡Eliminado!", "La asignación ha sido eliminada correctamente.", "success");
+                } else {
+                  Swal.fire("Error", "No se pudo eliminar la asignación.", "error");
+                }
+              })
+              .catch(error => {
+                console.error(error);
+                Swal.fire("Error", "Ocurrió un problema al eliminar la asignación.", "error");
+              });
           }
         });
-      });
-    </script>
-</body>
+      }
+    });
+  });
+</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
 </html>

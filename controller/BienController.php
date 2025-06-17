@@ -1,5 +1,6 @@
 <?php
 
+
 if(isset($_SERVER['REQUEST_METHOD'])){
   
   require_once "../models/Bien.php";
@@ -25,30 +26,51 @@ if(isset($_SERVER['REQUEST_METHOD'])){
       }
       break;
 
-      case "POST":
-        //Obtener los datos enviados
-        $input = file_get_contents("php://input");
-        $dataJSON=json_decode($input,true);
+case "POST":
+    header("Content-Type: application/json; charset=utf-8");
 
-        //creamos un array asociativo con lo datos del nuevo registro 
-        $registro=[
-          "condicion"        =>$dataJSON["condicion"],
-          "modelo"           =>$dataJSON["modelo"],
-          "numSerie"         =>$dataJSON["numSerie"],
-          "descripcion"      =>$dataJSON["descripcion"],
-          "fotografia"       =>$dataJSON["fotografia"],
-          "idMarca"          =>$dataJSON["idMarca"],
-          "idUsuario"        =>$dataJSON["idUsuario"],
+    // Manejo de imagen subida (file)
+    $imagenBase64 = null;
+    if (isset($_FILES['fotografia']) && $_FILES['fotografia']['tmp_name'] != "") {
+        $imagenBinaria = file_get_contents($_FILES['fotografia']['tmp_name']);
+        $imagenBase64 = base64_encode($imagenBinaria);
+    }
 
-        ];
-        //Obtenemos el número de registros
-        $filasAfectadas=$bien->add($registro);
+    $registro = [
+        "condicion"   => $_POST["condicion"],
+        "modelo"      => $_POST["modelo"],
+        "numSerie"    => $_POST["numSerie"],
+        "descripcion" => $_POST["descripcion"],
+        "fotografia"  => $imagenBase64,
+        "idMarca"     => $_POST["idMarca"],
+        "idUsuario"   => $_POST["idUsuario"],
+    ];
 
-        //Notificamos al usuario el número de filas en formato JSON
-        //{"filas":1}
-        header("Content-Type: application/json; charset=utf-8");
-        echo json_encode(["filas"=>$filasAfectadas]);
-      break;
+    $filasAfectadas = $bien->add($registro);
+    echo json_encode(["filas" => $filasAfectadas]);
+    break;
+
+      case "PUT":
+    $input = file_get_contents("php://input");
+    $dataJSON = json_decode($input, true);
+
+    $registro = [
+        "idBien"      => $dataJSON["idBien"],
+        "condicion"   => $dataJSON["condicion"],
+        "modelo"      => $dataJSON["modelo"],
+        "numSerie"    => $dataJSON["numSerie"],
+        "descripcion" => $dataJSON["descripcion"],
+        "fotografia"  => $dataJSON["fotografia"],
+        "idMarca"     => $dataJSON["idMarca"],
+        "idUsuario"   => $dataJSON["idUsuario"]
+    ];
+
+    $filasAfectadas = $bien->update($registro);
+
+    header("Content-Type: application/json; charset=utf-8");
+    echo json_encode(["filas" => $filasAfectadas]);
+    break;
+
       
       case "DELETE":
           header("Content-Type: application/json; charset=utf-8");

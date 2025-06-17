@@ -1,163 +1,153 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<!--Font Awesone-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Roles</title>
 
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .navbar-brand {
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .card-header {
+      background-color: #0d6efd;
+      color: white;
+      font-weight: bold;
+    }
+    .btn {
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+    th, td {
+      vertical-align: middle;
+    }
+  </style>
 </head>
 <body>
-<!--INICIO DE NAVBAR-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Inventario</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
+
+<?php include_once(__DIR__ . '/../../layouts/navbar.php'); ?>
+
+
+<div class="container my-5">
+  <h2 class="text-center text-primary mb-4">Gestión de Roles</h2>
+  
+  <div class="text-end mb-3">
+    <button class="btn btn-success" onclick="location.href='./registrarRol.php'">
+      <i class="fa-solid fa-plus me-1"></i> Nuevo Rol
     </button>
-
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav w-100 d-flex flex-wrap justify-content-between">
-
-        <li class="nav-item">
-          <a class="nav-link" href="../areas/listarArea.php">Áreas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./ListarRoles.php">Roles</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../categorias/listarCategoria.php">Categorías</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../SubCategoria/ListarSubcategorias.php">Subcategorías</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../marcas/ListarMarcas.php">Marcas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../personas/ListarPersonas.php">Personas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../colaboradores/listarColaboradores.php">Colaboradores</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../usuarios/listarUsuarios.php">Usuarios</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../bienes/listarBien.php">Bienes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../asignaciones/listarAsignaciones.php">Asignaciones</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../caracteristicas/listarCaracteristicas.php">Características</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../detalles/listarDetalles.php">Detalles</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../configuracion/listarConfiguracion.php">Configuraciones</a>
-        </li>
-
-      </ul>
-    </div>
   </div>
-</nav>
-<!--FIN DE NAVBAR-->
-<div class="container mt-5">
-  <h2 class="text-center mt-3">GESTIÓN DE ROLES</h2>
-  <button id="pgaddRol" type="button" onclick="window.location.href='././registrarRol.php'" class="btn btn-success"><i class="fa-solid fa-plus"></i> NUEVO ROL</button>
-    <hr>
 
-    <div class="container">
-  <div class="card mt-3">
-    <div class="card-header bg-info"><strong>ROLES REGISTRADOS</strong></div>
-    <div class="card-body">
-      <table class="table table-bordered table-striped w-100" id="tabla-Roles">
+  <div class="card shadow">
+    <div class="card-header">ROLES REGISTRADOS</div>
+    <div class="card-body table-responsive">
+      <table class="table table-bordered table-hover align-middle" id="tabla-Roles">
         <colgroup>
-          <col style="width:15%;"><!--idRoles-->
-          <col style="width:65%;"><!--rol-->
-          <col style="width:20%;"><!--acciones-->
+          <col style="width: 15%;">
+          <col style="width: 65%;">
+          <col style="width: 20%;">
         </colgroup>
-        <thead>
+        <thead class="table-light">
           <tr>
             <th>ID</th>
-            <th>ROLES</th>
-            <th>ACCIONES</th>
-
+            <th>Rol</th>
+            <th class="text-center">Acciones</th>
           </tr>
         </thead>
-
         <tbody>
-        <!-- Contenido de forma dinámica -->
+          <!-- Contenido dinámico -->
         </tbody>
-
       </table>
     </div>
   </div>
-
-    </ul>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script>
-   //acceso global
-   //OBTENEMOS TODOS LOS DATOS
-  const tabla=document.querySelector("#tabla-Roles tbody");
-  function obtenerDatos(){
-     
+  const tabla = document.querySelector("#tabla-Roles tbody");
 
-    //fetch(RUTA_CONTROLADOR).then(JSON).then(DATA).catch(ERRORES)
-    fetch(`../../controller/RolesController.php?task=getAll`,{
-      method:'GET'
-    })
-    .then(response =>{return response.json()})
-    .then(data =>{
-      tabla.innerHTML=``;
-      data.forEach(element => {
-        tabla.innerHTML+=`
-        <tr>
-          <td>${element.idRol}</td>
-          <td>${element.rol}</td>
-          <td>
-          
-              <a href='editarRoles.php?id=${element.idRol}' title='Editar' class='btn btn-info btn-sm edit'><i class="fa-solid fa-pencil"></i></a>
-              <a href='#' title='Eliminar' data-idrol='${element.idRol}' class='btn btn-danger btn-sm delete'><i class="fa-solid fa-trash"></i></a>
-              
-            </td>
-
-          </tr>
+  function obtenerDatos() {
+    fetch(`../../controller/RolesController.php?task=getAll`)
+      .then(response => response.json())
+      .then(data => {
+        tabla.innerHTML = '';
+        data.forEach(element => {
+          tabla.innerHTML += `
+            <tr>
+              <td>${element.idRol}</td>
+              <td>${element.rol}</td>
+              <td class="text-center">
+                <a href='editarRoles.php?id=${element.idRol}' class='btn btn-outline-info btn-sm me-1' title='Editar'>
+                  <i class="fa-solid fa-pencil"></i>
+                </a>
+                <a href='#' class='btn btn-outline-danger btn-sm delete' data-idrol='${element.idRol}' title='Eliminar'>
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </td>
+            </tr>
           `;
         });
       })
-      .catch(error =>{console.error(error)});
-    }
-  document.addEventListener("DOMContentLoaded",()=>{
+      .catch(error => console.error(error));
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
     obtenerDatos();
 
-    tabla.addEventListener("click",(event)=>{
-  
-      const enlace=event.target.closest('a');
-      if(enlace && enlace.classList.contains('delete')){
+    tabla.addEventListener("click", (event) => {
+      const enlace = event.target.closest("a");
+      if (enlace && enlace.classList.contains("delete")) {
         event.preventDefault();
-        const idrol=enlace.getAttribute('data-idrol');
-          if(confirm("¿Está seguro de eliminar el registro?")){
-            fetch(`../../controller/RolesController.php/${idrol}`,{method:'DELETE'})
-            .then(response =>{return response.json()})
-            .then(datos=>{
-              if(datos.filas>0){
-                const filaEliminar=enlace.closest('tr');
-                if (filaEliminar){filaEliminar.remove();}
-              }
+        const idrol = enlace.getAttribute("data-idrol");
+
+        Swal.fire({
+          title: "¿Está seguro?",
+          text: "¡Esta acción no se puede revertir!",
+          icon: "warning",
+          footer: 'SENATI ING. SOFTWARE',
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí, eliminar",
+          cancelButtonText: "Cancelar"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`../../controller/RolesController.php/${idrol}`, {
+              method: 'DELETE'
             })
-            .catch(error=>{console.error(error)});
+              .then(response => response.json())
+              .then(datos => {
+                if (datos.filas > 0) {
+                  enlace.closest('tr').remove();
+                  Swal.fire("¡Eliminado!", "El Rol ha sido eliminado correctamente.", "success");
+                } else {
+                  Swal.fire("Error", "No se pudo eliminar el Rol.", "error");
+                }
+              })
+              .catch(error => {
+                console.error(error);
+                Swal.fire("Error", "Ocurrió un problema al eliminar el Rol.", "error");
+              });
           }
+        });
       }
     });
   });
 </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

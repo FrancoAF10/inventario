@@ -1,215 +1,185 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Actualizar Colaborador</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .btn {
+      transition: all 0.3s ease-in-out;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-    <form id="registro-colaborador" autocomplete="off" method="POST">
-      <h2 class="text-center mt-5">ACTUALIZACIÓN DE DATOS</h2>
-      <hr>
-      <div class="card mt-3">
-        <div class="card-header bg-info"><strong>ACTUALIZAR </strong></div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-                <select id="persona" class="form-select" required>
-                  <option value="">Seleccione Persona:</option>
-                </select>
-                <label for="personaSelect" class="form-label">Seleccionar Persona:</label>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-                <select id="areas" class="form-select" required>
-                  <option value="">Seleccione Area:</option>
-                </select>
-                <label for="areaSelect" class="form-label">Seleccionar Area:</label>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-                <select id="rol" class="form-select" required>
-                  <option value="">Seleccione Rol:</option>
-                </select>
-                <label for="rolSelect" class="form-label">Seleccionar Rol:</label>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <div class="form-floating">
-                <input type="date" class="form-control" id="fechainicio" name="fechainicio" required>
-                <label for="fechainicio" class="form-label">Fecha Inicio:</label>
-              </div>
-            </div>
-            <div class="col-md-6 mb-3">
-              <div class="form-floating">
-                <input type="date" class="form-control" id="fechafin" name="fechafin" required>
-                <label for="fechafin" class="form-label">Fecha Final</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer d-grid gap-2">
-          <button type="submit" class="btn btn-primary">ACTUALIZAR</button>
-        </div>
-      </div>
-    </form>
+<?php include_once(__DIR__ . '/../../layouts/navbar.php'); ?>
+
+
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-primary">Actualizar Colaborador</h2>
+    <button onclick="window.location.href='./listarColaboradores.php'" class="btn btn-outline-secondary">
+      <i class="fa-solid fa-arrow-left me-1"></i> Volver
+    </button>
   </div>
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
 
-  const personaSelect = document.getElementById("persona");
-  const areaSelect = document.getElementById("areas");
-  const rolSelect = document.getElementById("rol");
+  <form id="form-actualizar-colaborador" autocomplete="off">
+    <div class="card">
+      <div class="card-header bg-info text-white">
+        <strong>Formulario de Actualización</strong>
+      </div>
+      <div class="card-body">
 
-  const URL = new URLSearchParams(window.location.search);
-  const idcolaborador = URL.get("id");
+        <div class="form-floating mb-3">
+          <select id="persona" class="form-select" required>
+            <option value="">Seleccione Persona</option>
+          </select>
+          <label for="persona">Seleccionar Persona</label>
+        </div>
 
-  // Cargar personas
-  function cargarPersonas() {
-    fetch("../../controller/ColaboradorController.php?task=getPersonas")
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(persona => {
-          const option = document.createElement("option");
-          option.value = persona.idPersona;
-          option.textContent = `${persona.apellidos} ${persona.nombres}`;
-          personaSelect.appendChild(option);
+        <div class="form-floating mb-3">
+          <select id="areas" class="form-select" required>
+            <option value="">Seleccione Área</option>
+          </select>
+          <label for="areas">Seleccionar Área</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <select id="rol" class="form-select" required>
+            <option value="">Seleccione Rol</option>
+          </select>
+          <label for="rol">Seleccionar Rol</label>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="form-floating">
+              <input type="date" class="form-control" id="fechainicio" required>
+              <label for="fechainicio">Fecha Inicio</label>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-floating">
+              <input type="date" class="form-control" id="fechafin" >
+              <label for="fechafin">Fecha Fin</label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="card-footer text-end">
+        <button class="btn btn-primary" type="submit">
+          <i class="fa-solid fa-floppy-disk me-1"></i> Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const idcolaborador = urlParams.get("id");
+
+    const personaSelect = document.getElementById("persona");
+    const areaSelect = document.getElementById("areas");
+    const rolSelect = document.getElementById("rol");
+
+    function cargarSelect(url, element, idCampo, textoCampo) {
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          data.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item[idCampo];
+            option.textContent = item[textoCampo];
+            element.appendChild(option);
+          });
         });
-      })
-      .catch(error => console.error(error));
-  }
+    }
 
-  // Cargar áreas
-  function cargarAreas() {
-    fetch("../../controller/ColaboradorController.php?task=getAreas")
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(area => {
-          const option = document.createElement("option");
-          option.value = area.idArea;
-          option.textContent = area.area;
-          areaSelect.appendChild(option);
+    function obtenerColaborador() {
+      fetch(`../../controller/ColaboradorController.php?task=getById&idColaborador=${idcolaborador}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.length > 0) {
+            document.getElementById("fechainicio").value = data[0].inicio;
+            document.getElementById("fechafin").value = data[0].fin;
+            personaSelect.value = data[0].idPersona;
+            areaSelect.value = data[0].idArea;
+            rolSelect.value = data[0].idRol;
+          }
         });
-      })
-      .catch(error => console.error( error));
-  }
+    }
 
-  // Cargar roles
-  function cargarRoles() {
-    fetch("../../controller/ColaboradorController.php?task=getRoles")
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(rol => {
-          const option = document.createElement("option");
-          option.value = rol.idRol;
-          option.textContent = rol.rol;
-          rolSelect.appendChild(option);
-        });
-      })
-      .catch(error => console.error( error));
-  }
+    cargarSelect("../../controller/ColaboradorController.php?task=getPersonas", personaSelect, "idPersona", "apellidos");
+    cargarSelect("../../controller/ColaboradorController.php?task=getAreas", areaSelect, "idArea", "area");
+    cargarSelect("../../controller/ColaboradorController.php?task=getRoles", rolSelect, "idRol", "rol");
 
-  // Obtener datos del colaborador
-  function obtenerRegistro() {
-    const parametros = new URLSearchParams();
-    parametros.append("task", "getById");
-    parametros.append("idColaborador", idcolaborador);
+    obtenerColaborador();
 
-    fetch(`../../controller/ColaboradorController.php?${parametros}`, {
-      method: "GET"
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.length > 0) {
-          document.getElementById("fechainicio").value = data[0].inicio;
-          document.getElementById("fechafin").value = data[0].fin;
-          personaSelect.value = data[0].idPersona;
-          areaSelect.value = data[0].idArea;
-          rolSelect.value = data[0].idRol;
-        }
-      })
-      .catch(error => console.error(error));
-  }
+    document.getElementById("form-actualizar-colaborador").addEventListener("submit", (e) => {
+      e.preventDefault();
 
-  // Ejecutar cargas
-  cargarPersonas();
-  cargarAreas();
-  cargarRoles();
+      const datos = {
+        idColaborador: idcolaborador,
+        inicio: document.getElementById("fechainicio").value,
+        fin: document.getElementById("fechafin").value,
+        idPersona: personaSelect.value,
+        idArea: areaSelect.value,
+        idRol: rolSelect.value
+      };
 
-  obtenerRegistro()
-
-  // Manejar envío del formulario
-  const formulario = document.getElementById("registro-colaborador");
-
-  formulario.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const fechainicio = document.getElementById("fechainicio").value;
-    const fechafin = document.getElementById("fechafin").value;
-    const idPersona = personaSelect.value;
-    const idArea = areaSelect.value;
-    const idRol = rolSelect.value;
-
-    Swal.fire({
-      title: "COLABORADOR",
-      text: "¿Está seguro de actualizar?",
-      icon: "question",
-      footer: "SENATI ING. SOFTWARE",
-      confirmButtonText: "Aceptar",
-      confirmButtonColor: "#2980b9",
-      showCancelButton: true,
-      cancelButtonText: "Cancelar"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const datos = {
-          idColaborador: idcolaborador,
-          inicio: fechainicio,
-          fin: fechafin,
-          idPersona: idPersona,
-          idArea: idArea,
-          idRol: idRol
-        };
-
-        fetch("../../controller/ColaboradorController.php", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(datos)
-        })
-          .then(response => response.json())
+      Swal.fire({
+        title: '¿Actualizar colaborador?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, actualizar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#0d6efd'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch("../../controller/ColaboradorController.php", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(datos)
+          })
+          .then(res => res.json())
           .then(data => {
             if (data.filas > 0) {
-              Swal.fire({
-                title: "ACTUALIZADO",
-                text: "Datos del Colaborador actualizados",
-                icon: "success",
-                footer: "SENATI ING. SOFTWARE",
-                confirmButtonText: "OK",
-                confirmButtonColor: "#2980b9"
-              }).then(() => {
-                window.location.href = "../../view/colaboradores/listarColaboradores.php";
-              });
+              Swal.fire("Actualizado", "Colaborador actualizado correctamente", "success")
+                .then(() => window.location.href = "./listarColaboradores.php");
+            } else {
+              Swal.fire("Sin cambios", "No se modificó ningún dato", "info");
             }
           })
-          .catch(error => console.error(error));
-      }
+          .catch(() => Swal.fire("Error", "Ocurrió un problema al actualizar", "error"));
+        }
+      });
     });
   });
-});
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -43,6 +43,23 @@ if (isset($_SERVER['REQUEST_METHOD'])) {
       header("Content-Type: application/json; charset=utf-8");
       echo json_encode(["filas" => $filasAfectadas]);
       break;
+          
+      case "PUT":
+      $input = file_get_contents("php://input");
+      $dataJSON = json_decode($input, true);
+
+      $registro = [
+        "inicio" => $dataJSON["inicio"],
+        "fin" => $dataJSON["fin"],
+        "idBien" => $dataJSON["idBien"],
+        "idColaborador" => $dataJSON["idColaborador"],
+        "idAsignacion" => $dataJSON["idAsignacion"],
+      ];
+
+      $filasAfectadas = $asignaciones->update($registro);
+      header("Content-Type: application/json; charset=utf-8");
+      echo json_encode(["filas" => $filasAfectadas]);
+      break;
 
     case "DELETE":
       header("Content-Type: application/json; charset=utf-8");

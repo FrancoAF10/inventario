@@ -1,91 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registrar Usuario</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .navbar-brand {
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .card {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+    .btn {
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 
 <body>
-  <div class="container mt-5">
-    <form id="registrar-usuario" autocomplete="off" method="POST">
-      <h2 class="text-center mt-5">REGISTRAR USUARIO</h2>
-      <button id="volverUsuario" type="button" onclick="window.location.href='././listarUsuarios.php'" class="btn btn-success"><i class="fa-solid fa-arrow-left"></i> VOLVER</button>
-     <hr>
-      <div class="card mt-3">
-        <div class="card-header bg-info"><strong>REGISTRAR </strong></div>
+
+  <?php include_once(__DIR__ . '/../../layouts/navbar.php'); ?>
+
+  <div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="text-primary">Registrar Usuario</h2>
+      <button type="button" onclick="window.location.href='./listarUsuarios.php'" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i> Volver
+      </button>
+    </div>
+
+    <form autocomplete="off" id="formulario-registrar-usuario">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <strong>Formulario de Registro</strong>
+        </div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="nomUser" name="nomUser" placeholder="Nombre de Usuario"
-                  required>
-                <label for="nomUser" class="form-label">Nombre de Usuario:</label>
-              </div>
-            </div>
+          <div class="form-floating mb-3">
+            <input type="text" id="nomUser" name="nomUser" class="form-control" placeholder="Nombre de Usuario" required />
+            <label for="nomUser">Nombre de Usuario</label>
           </div>
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-                <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña"
-                  required>
-                <label for="password" class="form-label">Contraseña:</label>
-              </div>
-            </div>
+          <div class="form-floating mb-3">
+            <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required />
+            <label for="password">Contraseña</label>
           </div>
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-                <select id="estado" name="estado" class="form-select" required>
-                  <option value="Activo">Activo</option>
-                  <option value="Inactivo">Inactivo</option>
-                </select>
-                <label for="estado" class="form-label">Estado:</label>
-              </div>
-            </div>
+          <div class="form-floating mb-3">
+            <select id="estado" name="estado" class="form-select" required>
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+            <label for="estado">Estado</label>
           </div>
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-                <select id="idColaborador" name="idColaborador" class="form-select" required>
-                  <option value="">Seleccione un colaborador</option>
-                </select>
-                <label for="idColaborador" class="form-label">Seleccionar Colaborador:</label>
-              </div>
-            </div>
+          <div class="form-floating mb-3">
+            <select id="idColaborador" name="idColaborador" class="form-select" required>
+              <option value="">Seleccione un colaborador</option>
+            </select>
+            <label for="idColaborador">Seleccionar Colaborador</label>
           </div>
-          <div class="card-footer d-grid gap-2">
-            <button type="submit" class="btn btn-primary">Agregar Usuario</button>
-          </div>
+        </div>
+        <div class="card-footer text-end">
+          <button class="btn btn-primary" type="submit">
+            <i class="fa-solid fa-check me-1"></i> Registrar Usuario
+          </button>
+        </div>
+      </div>
     </form>
   </div>
-  </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
+
   <script>
+    // Carga colaboradores para el select
     document.addEventListener("DOMContentLoaded", () => {
-      const colaborador = document.querySelector("#idColaborador"); 
+      const colaborador = document.querySelector("#idColaborador");
 
       fetch("../../controller/UsuariosController.php?task=getColaboradores")
         .then(response => response.json())
         .then(data => {
-
-          data.forEach(colaboradores => {
-            colaborador.innerHTML += `<option value="${colaboradores.idColaborador}">${colaboradores.nombres} ${colaboradores.apellidos}</option>`;
+          data.forEach(col => {
+            colaborador.innerHTML += `<option value="${col.idColaborador}">${col.nombres} ${col.apellidos}</option>`;
           });
         })
         .catch(error => {
-          console.error(error);
+          console.error('Error al cargar colaboradores:', error);
         });
     });
 
-    const formulario = document.querySelector("#registrar-usuario");
+    const formulario = document.querySelector("#formulario-registrar-usuario");
+
     function registrarUsuario() {
       fetch(`../../controller/UsuariosController.php`, {
         method: 'POST',
@@ -97,42 +113,58 @@
           idColaborador: parseInt(document.querySelector('#idColaborador').value)
         })
       })
-        .then(response => { return response.json() })
+        .then(response => response.json())
         .then(data => {
           if (data.filas > 0) {
             formulario.reset();
             Swal.fire({
-              title: 'CONFIRMADO',
-              text: 'Usuario Registrado',
               icon: 'success',
+              title: 'Usuario registrado',
+              text: 'El usuario se registró correctamente.',
               footer: 'SENATI ING. SOFTWARE',
-              confirmButtonText: 'OK',
-              confirmButtonColor: '#2980b9',
-            })
+              confirmButtonColor: '#198754'
+            });
+          } else {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Sin cambios',
+              text: 'No se pudo registrar el usuario.',
+              confirmButtonColor: '#ffc107'
+            });
           }
         })
-        .catch(error => { console.error(error) });
+        .catch(error => {
+          console.error(error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error del servidor',
+            text: 'No se pudo registrar el usuario.',
+            confirmButtonColor: '#dc3545'
+          });
+        });
     }
-    //formulario=botonb[submit](validar Front)
-    formulario.addEventListener("submit", function (event) {
-      event.preventDefault();//cancela el evento
+
+    formulario.addEventListener("submit", (event) => {
+      event.preventDefault();
 
       Swal.fire({
-        title: 'USUARIO',
-        text: '¿Está seguro de registrar?',
+        title: '¿Registrar Usuario?',
+        text: 'Confirme si desea registrar el nuevo usuario.',
         icon: 'question',
-        footer: 'SENATI ING. SOFTWARE',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#2980b9',
         showCancelButton: true,
-        cancelButtonText: 'cancelar'
+        confirmButtonColor: '#0d6efd',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Registrar',
+        cancelButtonText: 'Cancelar'
       }).then((result) => {
         if (result.isConfirmed) {
           registrarUsuario();
         }
-      })
+      });
     });
   </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

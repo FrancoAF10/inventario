@@ -1,176 +1,194 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Actualizar Usuario</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" />
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .btn {
+      transition: all 0.3s ease-in-out;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
-  
-<div class="container mt-5">
-    <form id="registrar-usuario" autocomplete="off" method="POST">
-      <h2 class="text-center mt-5">ACTUALIZACIÓN DE DATOS</h2>
-      <hr>
-      <div class="card mt-3">
-        <div class="card-header bg-info"><strong>ACTUALIZAR USUARIO</strong></div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-              <input type="text" class="form-control" id="nomUser" name="nomUser" placeholder="Nombre de Usuario" autocomplete="username" required>
-                <label for="nomUser" class="form-label">Nombre de Usuario:</label>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-              <input type="password" class="form-control" id="password" name="password"
-              placeholder="Contraseña" autocomplete="current-password" required>
-                <label for="password" class="form-label">Contraseña:</label>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-                <select id="estado" name="estado" class="form-select" required>
-                  <option value="Activo">Activo</option>
-                  <option value="Inactivo">Inactivo</option>
-                </select>
-                <label for="estado" class="form-label">Estado:</label>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="form-floating">
-                <select id="idColaborador" name="idColaborador" class="form-select" required>
-                  <option value="">Seleccione un colaborador</option>
-                </select>
-                <label for="idColaborador" class="form-label">Seleccionar Colaborador:</label>
-              </div>
-            </div>
-          </div>
-          <div class="card-footer d-grid gap-2">
-            <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
-          </div>
-    </form>
+<?php include_once(__DIR__ . '/../../layouts/navbar.php'); ?>
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-primary">Actualizar Usuario</h2>
+    <button onclick="window.location.href='./listarUsuarios.php'" class="btn btn-outline-secondary">
+      <i class="fa-solid fa-arrow-left me-1"></i> Volver
+    </button>
   </div>
-  </div>
-  </div>
-  <script>
-      document.addEventListener("DOMContentLoaded", () => {
-    // Obtener el registro existente para cargarlo en el formulario
-    function obtenerRegistro() {
-  const URL = new URLSearchParams(window.location.search);
-  const idusuario = URL.get('id');
-  const colaboradorSelect = document.querySelector("#idColaborador");
 
-  const parametros = new URLSearchParams();
-  parametros.append("task", "getById");
-  parametros.append("idUsuario", idusuario);
+  <form id="formulario-actualizar" autocomplete="off" method="POST" novalidate>
+    <div class="card">
+      <div class="card-header bg-info text-white">
+        <strong>Formulario de Actualización</strong>
+      </div>
+      <div class="card-body">
+        <div class="form-floating mb-3">
+          <input type="text" id="nomUser" name="nomUser" class="form-control" placeholder="Nombre de Usuario" required />
+          <label for="nomUser">Nombre de Usuario</label>
+        </div>
 
-  let usuarioData = null;
+        <div class="form-floating mb-3">
+          <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required />
+          <label for="password">Contraseña</label>
+        </div>
 
-  // Paso 1: Obtener los datos del usuario
-  fetch(`../../controller/UsuariosController.php?${parametros}`, { method: 'GET' })
-    .then(response => response.json())
-    .then(data => {
-      if (data.length > 0) {
-        usuarioData = data[0]; // Guardamos los datos del usuario para usar después
-        document.getElementById("nomUser").value = usuarioData.nomUser;
-        document.getElementById("password").value = usuarioData.passUser;
-        document.getElementById("estado").value = usuarioData.estado;
-      }
-      // Paso 2: Obtener colaboradores
-      return fetch("../../controller/UsuariosController.php?task=getColaboradores");
-    })
-    .then(response => response.json())
-    .then(data => {
-      data.forEach(colaborador => {
-        const option = document.createElement("option");
-        option.value = colaborador.idColaborador;
-        option.textContent = `${colaborador.nombres} ${colaborador.apellidos}`;
-        colaboradorSelect.appendChild(option);
+        <div class="form-floating mb-3">
+          <select id="estado" name="estado" class="form-select" required>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+          <label for="estado">Estado</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <select id="idColaborador" name="idColaborador" class="form-select" required>
+            <option value="">Seleccione un colaborador</option>
+          </select>
+          <label for="idColaborador">Seleccionar Colaborador</label>
+        </div>
+      </div>
+      <div class="card-footer text-end">
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-floppy-disk me-1"></i> Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const idUsuario = urlParams.get("id");
+    const colaboradorSelect = document.getElementById("idColaborador");
+
+    if (!idUsuario) {
+      Swal.fire("Error", "No se encontró el ID del usuario en la URL.", "error");
+      return;
+    }
+
+    // Cargar datos de usuario y colaboradores
+    fetch(`../../controller/UsuariosController.php?task=getById&idUsuario=${idUsuario}`)
+      .then(res => res.json())
+      .then(dataUser => {
+        if (!dataUser.length) {
+          Swal.fire("Error", "Usuario no encontrado.", "error");
+          throw new Error("Usuario no encontrado");
+        }
+        const usuario = dataUser[0];
+        document.getElementById("nomUser").value = usuario.nomUser;
+        document.getElementById("password").value = usuario.passUser;
+        document.getElementById("estado").value = usuario.estado;
+
+        return fetch("../../controller/UsuariosController.php?task=getColaboradores");
+      })
+      .then(res => res.json())
+      .then(dataColaboradores => {
+        dataColaboradores.forEach(col => {
+          const option = document.createElement("option");
+          option.value = col.idColaborador;
+          option.textContent = `${col.nombres} ${col.apellidos}`;
+          colaboradorSelect.appendChild(option);
+        });
+
+        // Seleccionar colaborador asignado al usuario
+        fetch(`../../controller/UsuariosController.php?task=getById&idUsuario=${idUsuario}`)
+          .then(res => res.json())
+          .then(dataUser => {
+            if (dataUser.length) {
+              colaboradorSelect.value = dataUser[0].idColaborador;
+            }
+          });
+      })
+      .catch(err => {
+        console.error(err);
+        Swal.fire("Error", "No se pudo cargar la información.", "error");
       });
 
-      // Paso 3: Ahora que las opciones están cargadas, seleccionamos el colaborador correcto
-      if (usuarioData) {
-        colaboradorSelect.value = usuarioData.idColaborador;
+    document.getElementById("formulario-actualizar").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const nomUser = document.getElementById("nomUser").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const estado = document.getElementById("estado").value;
+      const idColaborador = document.getElementById("idColaborador").value;
+
+      if (!nomUser || !password || !idColaborador) {
+        Swal.fire("Campos incompletos", "Por favor complete todos los campos.", "warning");
+        return;
       }
-    })
-    .catch(error => {
-      console.error(error);
-    });
-}
-
-
-    obtenerRegistro();
-
-    const formulario = document.getElementById('registrar-usuario');
-
-    formulario.addEventListener('submit', function (event) {
-      event.preventDefault();
-
-      const idusuario = new URLSearchParams(window.location.search).get('id');
-      const nomUser = document.getElementById('nomUser').value;
-      const passUser = document.getElementById('password').value;
-      const estado = document.getElementById('estado').value;
-      const idColaborador = document.getElementById('idColaborador').value;
 
       Swal.fire({
-        title: 'USUARIOS',
-        text: '¿Está seguro de actualizar?',
-        icon: 'question',
-        footer: 'SENATI ING. SOFTWARE',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#2980b9',
+        title: "¿Actualizar usuario?",
+        text: "Esta acción modificará la información.",
+        icon: "question",
         showCancelButton: true,
-        cancelButtonText: 'Cancelar'
-      }).then((result) => {
+        confirmButtonText: "Sí, actualizar",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#0d6efd",
+        cancelButtonColor: "#6c757d"
+      }).then(result => {
         if (result.isConfirmed) {
-          const datos = {
-            idUsuario:idusuario,
-              nomUser: nomUser,
-              passUser:passUser,
-              estado:estado,
-              idColaborador: idColaborador,
-          };
-
-          fetch('../../controller/UsuariosController.php', {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datos)
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.filas > 0) {
-                Swal.fire({
-                  title: 'ACTUALIZADO',
-                  text: 'Datos de Usuario actualizados',
-                  icon: 'success',
-                  footer: 'SENATI ING. SOFTWARE',
-                  confirmButtonText: 'OK',
-                  confirmButtonColor: '#2980b9',
-                }).then(() => {
-                  // Redirigir después de aceptar el mensaje de éxito
-                  window.location.href = "../../view/usuarios/listarUsuarios.php";
-                });
-              }
+          fetch("../../controller/UsuariosController.php", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              idUsuario,
+              nomUser,
+              passUser: password,
+              estado,
+              idColaborador
             })
-            .catch(error => {
-              console.error(error);
-            });
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.filas > 0) {
+              Swal.fire({
+                title: "Actualizado",
+                text: "Datos de usuario actualizados correctamente.",
+                icon: "success",
+                confirmButtonColor: "#198754"
+              }).then(() => {
+                window.location.href = "./listarUsuarios.php";
+              });
+            } else {
+              Swal.fire("Sin cambios", "No se actualizó ningún registro.", "info");
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            Swal.fire("Error", "No se pudo actualizar el usuario.", "error");
+          });
         }
       });
     });
   });
-  </script>
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
